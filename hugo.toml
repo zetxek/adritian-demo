@@ -36,10 +36,14 @@ theme = "adritian-free-hugo-theme"
   weight = 3
 
   [[menu.header]]
-  name = "Contact"
-  URL = "#contact"
+  name = "Blog"
+  URL = "/blog"
   weight = 4
 
+  [[menu.header]]
+  name = "Contact"
+  URL = "#contact"
+  weight = 5
 
   [[menu.footer]]
   name = "About"
