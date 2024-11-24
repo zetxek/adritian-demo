@@ -2,11 +2,6 @@ baseURL = "https://adritian-demo.vercel.app/"
 languageCode = "en"
 theme = "adritian-free-hugo-theme"
 
-# Languages
-defaultContentLanguage = 'en'
-defaultContentLanguageInSubdir = false
-fallbackLanguages = 'en'
-
 [languages]
   [languages.en]
     disabled = false
@@ -147,7 +142,9 @@ fallbackLanguages = 'en'
       [[languages.fr.menus.footer]]
         name = "Contact"
         URL = "#contact"
-        weight = 4 
+        weight = 4
+  
+  
 
 # Plugins
 [params.plugins]
@@ -160,10 +157,6 @@ fallbackLanguages = 'en'
   [[params.plugins.css]]
   URL = "css/custom.css"
 
-  # SCSS Plugins
-  [[params.plugins.scss]]
-  URL = "css/menu.scss"
-
   # JS Plugins
   [[params.plugins.js]]
   URL = "js/rad-animations.js"
@@ -172,6 +165,9 @@ fallbackLanguages = 'en'
   [[params.plugins.js]]
   URL = "js/library/fontfaceobserver.js"
 
+  # SCSS Plugins
+  [[params.plugins.scss]]
+  URL = "css/menu.scss"
 
 [params]
 
