@@ -2,6 +2,13 @@ baseURL = "https://adritian-demo.vercel.app/"
 languageCode = "en"
 theme = "adritian-free-hugo-theme"
 
+[build]
+  [build.buildStats]
+    disableClasses = false
+    disableIDs = false
+    disableTags = false
+    enable = true
+
 [languages]
   [languages.en]
     disabled = false
@@ -153,6 +160,8 @@ theme = "adritian-free-hugo-theme"
   [[params.plugins.css]]
   URL = "css/main.css"
   [[params.plugins.css]]
+  URL = "css/adritian.css"
+  [[params.plugins.css]]
   URL = "css/adritian-icons.css"
   [[params.plugins.css]]
   URL = "css/custom.css"
@@ -167,7 +176,14 @@ theme = "adritian-free-hugo-theme"
 
   # SCSS Plugins
   [[params.plugins.scss]]
-  URL = "css/menu.scss"
+  URL = "scss/menu.scss"
+
+  # SCSS Plugins
+  [[params.plugins.scss]]
+  URL = "scss/menu.scss"
+  [[params.plugins.scss]]
+  URL = "scss/bootstrap/bootstrap.scss"
+
 
 [params]
 
