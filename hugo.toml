@@ -177,10 +177,6 @@ theme = "adritian-free-hugo-theme"
   # SCSS Plugins
   [[params.plugins.scss]]
   URL = "scss/menu.scss"
-
-  # SCSS Plugins
-  [[params.plugins.scss]]
-  URL = "scss/menu.scss"
   [[params.plugins.scss]]
   URL = "scss/bootstrap/bootstrap.scss"
 
