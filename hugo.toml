@@ -29,6 +29,9 @@ theme = "adritian-free-hugo-theme"
     disableTags = false
     enable = true
 
+[params.languages.selector.disable]
+  footer = false
+
 [languages]
   [languages.en]
     disabled = false
@@ -178,8 +181,6 @@ theme = "adritian-free-hugo-theme"
 
   # CSS Plugins
   [[params.plugins.css]]
-  URL = "css/main.css"
-  [[params.plugins.css]]
   URL = "css/custom.css"
   [[params.plugins.css]]
   URL = "css/adritian-icons.css"
@@ -195,3 +196,20 @@ theme = "adritian-free-hugo-theme"
   # SCSS Plugins
   [[params.plugins.scss]]
   URL = "scss/adritian.scss"
+
+
+# theme/color style 
+[params.colorTheme]
+
+## the following configuration would disable automatic theme selection
+#  [params.colorTheme.auto]
+#    disable = true
+#  [params.colorTheme.forced]
+#    theme = "dark"
+
+## the following parameter will disable theme override in the footer
+#  [params.colorTheme.selector.disable]
+#  footer = true
+
+
+## by default we allow override AND automatic selection
