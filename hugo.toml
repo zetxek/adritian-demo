@@ -223,7 +223,7 @@ theme = "adritian-free-hugo-theme"
 ## by default we allow override AND automatic selection
 
 [params.blog]
-layout = "sidebar" # options: default, sidebar
+layout = "default" # options: default, sidebar
 sidebarWidth = "25" # percentage width of the sidebar
 showCategories = true
 showRecentPosts = true
