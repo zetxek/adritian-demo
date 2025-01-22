@@ -1,0 +1,14 @@
+github.com/gohugoio/hugo-mod-bootstrap-scss/v5 v5.20300.20200 h1:SmpwwN3DNzJWbV+IT8gaFu07ENUFpCvKou5BHYUKuVs=
+github.com/gohugoio/hugo-mod-bootstrap-scss/v5 v5.20300.20200/go.mod h1:kx8MBj9T7SFR8ZClWvKZPmmUxBaltkoXvnWlZZcSnYA=
+github.com/gohugoio/hugo-mod-jslibs-dist/popperjs/v2 v2.21100.20000/go.mod h1:mFberT6ZtcchrsDtfvJM7aAH2bDKLdOnruUHl0hlapI=
+github.com/twbs/bootstrap v5.3.2+incompatible/go.mod h1:fZTSrkpSf0/HkL0IIJzvVspTt1r9zuf7XlZau8kpcY0=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250120122236-25d7837ed4e8 h1:dr/Qq+F6w3WG6dPiB6sOil8JNdaN40dACc9s/xE/4kk=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250120122236-25d7837ed4e8/go.mod h1:RZxMuUPx+AJwqABiHDQWSVEskypgZCqZ0MwOgCvA6o0=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250120151413-3d0e9bf157ad h1:39pNN+4wQ6AOrzHacTr78wvaQI3Ms6A0JQtERCv5H3I=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250120151413-3d0e9bf157ad/go.mod h1:rBaUp2A0XzOQn/DReVVdDnbIjA/kaigo1xBHdLAvx8w=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250120151805-6c3d6284df03 h1:fL11k6fT3cd8d9Vf9NNoQSX+uds2a74pASQAqzGH/mo=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250120151805-6c3d6284df03/go.mod h1:rBaUp2A0XzOQn/DReVVdDnbIjA/kaigo1xBHdLAvx8w=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250121121957-a1b40fd07955 h1:6/8zACH+2ZO5ICpLjBlZiQtgsskPY3sMJ4Aw1WSUUiA=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250121121957-a1b40fd07955/go.mod h1:rBaUp2A0XzOQn/DReVVdDnbIjA/kaigo1xBHdLAvx8w=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250122124722-dff57323f46b h1:8Jd1+1Xb+tiFqKLBXQD5F4bSGMLXDABISvKUhn1Z060=
+github.com/zetxek/adritian-free-hugo-theme v1.4.27-0.20250122124722-dff57323f46b/go.mod h1:rBaUp2A0XzOQn/DReVVdDnbIjA/kaigo1xBHdLAvx8w=

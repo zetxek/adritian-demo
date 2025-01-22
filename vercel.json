@@ -1,6 +1,6 @@
 {
     "buildCommand": "echo VERCEL_URL=$VERCEL_URL ; hugo --minify --baseURL=\"https://$VERCEL_URL/\"",
-    "installCommand": "npm i -D postcss postcss-cli autoprefixer  ",
+    "installCommand": "dnf -y install golang ; npm i -D postcss postcss-cli autoprefixer  ",
     "cleanUrls": true,
     "headers": [
         {
