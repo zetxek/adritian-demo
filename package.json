@@ -1,10 +1,20 @@
 {
   "comments": {
     "dependencies": {},
-    "devDependencies": {}
+    "devDependencies": {
+      "autoprefixer": "github.com/zetxek/adritian-free-hugo-theme",
+      "bootstrap": "github.com/zetxek/adritian-free-hugo-theme",
+      "postcss": "github.com/zetxek/adritian-free-hugo-theme",
+      "postcss-cli": "github.com/zetxek/adritian-free-hugo-theme"
+    }
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "bootstrap": "^5.3.3",
+    "postcss": "^8.4.35",
+    "postcss-cli": "^11.0.0"
+  },
   "name": "adritian-demo",
   "version": "0.1.0"
 }
