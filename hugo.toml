@@ -6,6 +6,18 @@ title = "Adritian Demo"
     path = "github.com/zetxek/adritian-free-hugo-theme"
     branch = "172-enhancement-fix-bootstrap-import-in-the-theme"
 
+  [[module.mounts]]
+    source = "node_modules/bootstrap/scss"
+    target = "assets/scss/bootstrap"
+
+  [[module.mounts]]
+    source = "node_modules/bootstrap/dist/js"
+    target = "assets/js/bootstrap"
+
+  [[module.mounts]]
+    source = "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+    target = "assets/js/vendor/bootstrap.bundle.min.js"
+
 [params]
   title = 'Adritian - a high performance hugo theme by Adrián Moreno'
   description = 'This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications.'
