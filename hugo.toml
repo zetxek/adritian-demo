@@ -1,9 +1,22 @@
 baseURL = "https://adritian-demo.vercel.app/"
-languageCode = "en"
+title = "Adritian Demo"
 
 [module]
   [[module.imports]]
-    path = 'github.com/zetxek/adritian-free-hugo-theme'  
+    path = "github.com/zetxek/adritian-free-hugo-theme"
+    branch = "172-enhancement-fix-bootstrap-import-in-the-theme"
+
+  [[module.mounts]]
+    source = "node_modules/bootstrap/scss"
+    target = "assets/scss/bootstrap"
+
+  [[module.mounts]]
+    source = "node_modules/bootstrap/dist/js"
+    target = "assets/js/bootstrap"
+
+  [[module.mounts]]
+    source = "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+    target = "assets/js/vendor/bootstrap.bundle.min.js"
 
 [params]
   title = 'Adritian - a high performance hugo theme by Adrián Moreno'
@@ -22,7 +35,7 @@ languageCode = "en"
   # to enable, just set to true
   vercelPageInsights = false
   vercelAnalytics = false
-  
+
   # google analytics and tag manager. to enable, set "enabled" to true
   # and add the tracking code (UA-something for analytics, GTM-something for tag manager)
   [params.analytics.googleAnalytics]
@@ -183,8 +196,8 @@ languageCode = "en"
         name = "Contact"
         URL = "#contact"
         weight = 4
-  
-  
+
+
 
 # Plugins
 [params.plugins]
@@ -194,7 +207,7 @@ languageCode = "en"
   URL = "css/custom.css"
   [[params.plugins.css]]
   URL = "css/adritian-icons.css"
-  
+
   # JS Plugins
   [[params.plugins.js]]
   URL = "js/rad-animations.js"

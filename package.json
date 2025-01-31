@@ -1,24 +1,20 @@
 {
-  "name": "adritian-demo",
-  "version": "1.0.0",
-  "description": "Demo site for adritian Hugo theme",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "comments": {
+    "dependencies": {},
+    "devDependencies": {
+      "autoprefixer": "github.com/zetxek/adritian-free-hugo-theme",
+      "bootstrap": "github.com/zetxek/adritian-free-hugo-theme",
+      "postcss": "github.com/zetxek/adritian-free-hugo-theme",
+      "postcss-cli": "github.com/zetxek/adritian-free-hugo-theme"
+    }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zetxek/adritian-demo.git"
-  },
-  "author": "Adrián Moreno Peña",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zetxek/adritian-demo/issues"
-  },
-  "homepage": "https://github.com/zetxek/adritian-demo#readme",
-  "dependencies": {
-    "@fullhuman/postcss-purgecss": "^6.0.0",
-    "postcss": "^8.4.41",
+  "dependencies": {},
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "bootstrap": "^5.3.3",
+    "postcss": "^8.4.35",
     "postcss-cli": "^11.0.0"
-  }
+  },
+  "name": "adritian-demo",
+  "version": "0.1.0"
 }
