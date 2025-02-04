@@ -1,22 +1,46 @@
 baseURL = "https://adritian-demo.vercel.app/"
 title = "Adritian Demo"
 
-[module]
-  [[module.imports]]
-    path = "github.com/zetxek/adritian-free-hugo-theme"
-    branch = "172-enhancement-fix-bootstrap-import-in-the-theme"
 
-  [[module.mounts]]
-    source = "node_modules/bootstrap/scss"
-    target = "assets/scss/bootstrap"
+## Base mounts - so your site's assets are available
+[[module.mounts]]
+source = "archetypes"
+target = "archetypes"
 
-  [[module.mounts]]
-    source = "node_modules/bootstrap/dist/js"
-    target = "assets/js/bootstrap"
+[[module.mounts]]
+source = "assets"
+target = "assets"
 
-  [[module.mounts]]
-    source = "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-    target = "assets/js/vendor/bootstrap.bundle.min.js"
+[[module.mounts]]
+source = "i18n"
+target = "i18n"
+
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+
+[[module.mounts]]
+source = "static"
+target = "static"
+
+# The following mounts are required for the theme to be able to load bootstrap
+# Remember also to copy the theme's `package.json` to your site, and run `npm install`
+[[module.mounts]]
+source = "node_modules/bootstrap/scss"
+target = "assets/scss/bootstrap"
+
+[[module.mounts]]
+source = "node_modules/bootstrap/dist/js"
+target = "assets/js/bootstrap"
+
+[[module.mounts]]
+source = "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+target = "assets/js/vendor/bootstrap.bundle.min.js"
+
+[[module.mounts]]
+source = "node_modules/bootstrap-print-css/css/bootstrap-print.css"
+target = "assets/css/bootstrap-print.css"
+
 
 [params]
   title = 'Adritian - a high performance hugo theme by Adrián Moreno'
