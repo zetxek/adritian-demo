@@ -6,7 +6,6 @@ type = 'blog'
 
 [images]
     featured_image = '/img/blog/feature-sample-3.png'
-thumbnail = '/img/blog/feature-sample-3.png'
 +++
 
 Sample blog content. Like a lorem ipsum but saying something more interesting.
