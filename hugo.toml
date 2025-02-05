@@ -234,6 +234,8 @@ target = "assets/css/bootstrap-print.css"
   URL = "css/custom.css"
   [[params.plugins.css]]
   URL = "css/adritian-icons.css"
+  [[params.plugins.css]]
+  URL = "css/bootstrap-print.css"
 
   # JS Plugins
   [[params.plugins.js]]
