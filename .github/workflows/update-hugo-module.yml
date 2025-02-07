@@ -45,7 +45,13 @@ jobs:
           
           # Commit and push if there are changes
           if [[ -n $(git status -s) ]]; then
+            # Update package.json
+            hugo mod npm pack
+            npm install
+
+            # Add changes
             git add go.mod go.sum
+            git add package.json package-lock.json
             git commit -m "Update Hugo modules from ${OLD_VERSION} to ${NEW_VERSION}"
             git push origin $BRANCH_NAME
             
