@@ -33,22 +33,34 @@ jobs:
           BRANCH_NAME="module-update/$(date +%Y-%m-%d)"
           git checkout -b $BRANCH_NAME
           
+          # Store original module version
+          OLD_VERSION=$(hugo mod graph | grep -o '@v[0-9]*\.[0-9]*\.[0-9]*' | head -n1)
+          
           # Update modules
           hugo mod get -u
           hugo mod tidy
           
+          # Get new module version
+          NEW_VERSION=$(hugo mod graph | grep -o '@v[0-9]*\.[0-9]*\.[0-9]*' | head -n1)
+          
           # Commit and push if there are changes
           if [[ -n $(git status -s) ]]; then
             git add go.mod go.sum
-            git commit -m "Update Hugo modules"
+            git commit -m "Update Hugo modules from ${OLD_VERSION} to ${NEW_VERSION}"
             git push origin $BRANCH_NAME
             
+            PR_BODY="🤖 Automated update of Hugo modules.
+            
+            Module version changed from ${OLD_VERSION} to ${NEW_VERSION}
+            
+            Created by Github action: https://github.com/zetxek/adritian-demo/actions/workflows/update-hugo-module.yml"
+
             # Create PR
             gh pr create \
               -B main \
               -H $BRANCH_NAME \
-              --title "[auto] Update Hugo modules" \
-              --body "Automated update of Hugo modules. Created by Github action."
+              --title "[auto] Update Hugo modules ${OLD_VERSION} → ${NEW_VERSION}" \
+              --body "$PR_BODY"
           else
             echo "No updates found"
           fi
