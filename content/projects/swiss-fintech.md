@@ -18,4 +18,22 @@ params:
 ## The content is used for the description of the project
 ---
 
-The Swiss Finance + Technology Association is the leading FinTech hub in Switzerland.
+Here you can add additional context, description, links, etc. 
+The content you see here comes from the contents of the `content/projects` folder.
+
+This project is in the file `projects/swiss-fintech.md`.
+
+In the markdown file frontmatter you can also define additional parameters, such as the link:
+
+```
+link: "https://www.adrianmoreno.info" # optional URL to link the logo to
+
+params:
+    button:
+        icon: "icon-arrow-right"
+        btnText: "Case Study"
+        URL: "https://www.adrianmoreno.info"
+    image:  
+        x: "images/works/swissfintech.jpg"
+        _2x: "images/works/swissfintech@2x.jpg"
+```

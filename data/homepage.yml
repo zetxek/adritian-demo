@@ -61,6 +61,9 @@ showcase:
 
     - icon: "cloud-arrow-down"
       URL: "https://www.adrianmoreno.info/"
+
+    - icon: "square-xing"
+      URL: "https://www.adrianmoreno.info/"
 # about
 about:
   enable: true
