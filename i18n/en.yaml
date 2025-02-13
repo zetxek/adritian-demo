@@ -1,0 +1,233 @@
+## Meta tags
+- id: "meta_title"
+  translation: "Adritian - a high performance hugo theme by Adrián Moreno"
+- id: "meta_description"
+  translation: "This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications."
+- id: "meta_keywords"
+  translation: "hugo, theme, bootstrap, adritian, adrian moreno, personal site, portfolio, single page application"
+- id: "meta_author"
+  translation: "Adrián Moreno Peña"
+- id: "meta_image"
+  translation: "/img/general/og-image.jpg"
+
+## Header
+
+- id: "logo_alt"
+  translation: "Adritian logo"
+
+- id: "logo_text1"
+  translation: "Adritian"
+
+- id: "logo_text2"
+  translation: "Demo"
+
+- id: "nav_home"
+  translation: "HOME"
+
+## General
+- id: "skipToMainContent"
+  translation: "Skip to main content"
+
+- id: "toggle_navigation"
+  translation: "Toggle navigation"
+
+## Footer
+- id: "footer_notice"
+  translation: "© Adritian. Free Hugo theme by Adrián Moreno Peña."
+
+- id: "language"
+  translation: "Language"
+
+- id: "toggle_theme"
+  translation: "Toggle theme"
+
+- id: "theme_light"
+  translation: "☀️ Light"
+- id: "theme_dark"
+  translation: "🌑 Dark"
+- id: "theme_auto"
+  translation: "✨ Auto"
+
+## Homepage head title
+- id: "head_title"
+  translation: "Demo site for Adritian - a high performance hugo theme by Adrián Moreno"
+
+- id: "head_description"
+  translation: "This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications."
+
+## Homepage showcase
+- id: "showcase_title"
+  translation: "Welcome to the demo"
+
+- id: "showcase_subtitle"
+  translation: "Let's dive into an example"
+
+- id: "showcase_description"
+  translation: "This is a high performance theme for the Hugo static site generator. 
+    This sample content can be edited in the locale files (as the theme supports translations).
+    <br>
+    You can download this theme from <a target='_blank' href='https://github.com/zetxek/adritian-free-hugo-theme'>github</a>, 
+    and see it live <a target='_blank' href='https://adritian-demo.vercel.app/'>as a demo site</a> 
+    or <a target='_blank' href='https://www.adrianmoreno.info'>a real one</a>.
+    <br>
+    The content you see so far in the homepage is:
+    <ul>
+      <li>Site logo/name: site config file (<code>hugo.toml</code>)</li>
+      <li>Site top menu: site config file (<code>hugo.toml</code>), look for the <code>[[languages.en.menus.header]]</code> section</li>
+      <li>This paragraph: <code>i18n/en.yaml</code> (for English)</li>
+    </ul>
+    Additionally, the order of the items in the homepage is configured in the <code>sections</code> array in the <code>hugo.toml</code> file:
+    <code>sections = [
+  \"showcase\",
+  \"about\",
+  \"education\",
+  \"experience\",
+  \"client-and-work\",
+  \"testimonial\",
+  \"contact\",
+  \"newsletter\",
+  ]</code><br/> 
+  The content of each section is defined in the <code>data/homepage.yml</code> file (ie: links to social sites, mail, ...).
+  <br/>
+  If you scroll this page you will see some hints on where the content comes from - all the way to the footer menu. These links come from the site config file (<code>hugo.toml</code>), look for the <code>[[languages.en.menus.footer]]</code> section."
+
+- id: "showcase_button"
+  translation: "Contact"
+
+  ## not visible but used for accessibility
+- id: "showcase_image_alt"
+  translation: "A picture of Cool Name"
+
+## Homepage about
+- id: "about_title"
+  translation: "Who am I?"
+
+- id: "about_content"
+  translation:  '<p class="lead">
+      Here you can add some information about you. A small excerpt that describes 
+      your experience, for example.   
+      </br>
+      You explain something about your academic/study background, as well as your
+      preferred areas of work.
+      </p>
+      <p>The content for this section is defined in the <code>i18n/en.yaml</code> file, 
+      in the <code>about_content</code> item.
+      </p>'
+
+- id: "about_button"
+  translation: "About Me"
+
+## Homepage education
+- id: "education_title"
+  translation: "Education"
+
+## Homepage experience
+- id: "experience_title"
+  translation: "Experience"
+
+- id: "experience_description"
+  translation: '<p>This is where you can highlight a bit over your experience. Years of total experience, specialization, etc.
+      <br/>The content in this intro comes from the <code>i18n/en.yaml</code> file, in the <code>experience_description</code> item.
+      <br/>The content for each experience item (that you can click on the left) is defined in the <code>content/experience</code> folder, with one content item per experience, as in <code>job-1.md</code>, <code>job-2.md</code>, etc.
+      <br/>The content (text and URL) for the buttons below (where you can add links) comes from the translation file, <code>i18n/en.yaml</code>, in the <code>experience_button</code>, <code>experience_button_url</code>, <code>experience_button2</code>, <code>experience_button2_url</code>, <code>experience_button3</code>, <code>experience_button3_url</code> items.'
+
+- id: "experience_button"
+  translation: "LinkedIn" 
+
+- id: "experience_button_url"
+  translation: "https://www.linkedin.com/in/adrianmoreno/"
+
+- id: "experience_button2"
+  translation: "Download resume"
+
+- id: "experience_button2_url"
+  translation: "/img/general/user-smile-fill.svg"
+
+- id: "experience_button3"
+  translation: "View all"
+
+- id: "experience_button3_url"
+  translation: "/experience"
+
+## Homepage client & work
+- id: "client_work_title"
+  translation: "Clients & Work"
+
+## Homepage newsletter
+- id: "newsletter_title"
+  translation: "Newsletter"
+
+- id: "newsletter_button"
+  translation: "Subscribe"
+
+- id: "newsletter_placeholder"
+  translation: "Your email"
+
+- id: "newsletter_success_message"
+  translation: "Thank you for subscribing to my newsletter!"
+
+- id: "newsletter_error_message"
+  translation: "An error occurred. Please try again."
+
+- id: "newsletter_note"
+  translation: "We'll never share your email with anyone else."
+
+## Homepage testimonials
+- id: "testimonials_title"
+  translation: "Testimonials"
+
+## Homepage contact
+- id: "contact_title"
+  translation: "Contact"
+
+- id: "contact_button"
+  translation: "Send message"
+
+- id: "contact_form_name"
+  translation: "Full Name"
+
+- id: "contact_form_email"
+  translation: "Email Address"
+
+- id: "contact_form_message"
+  translation: "Type Your Message Here"
+
+- id: "contact_phone_title"
+  translation: "Phone Number"
+
+- id: "contact_phone_number"
+  translation: "Defined in i18n/en.yaml (contact_phone_number)"
+
+- id: "contact_email_title"
+  translation: "Email"
+
+- id: "contact_email_email"
+  translation: 'Defined in i18n/en.yaml (contact_email_email)'
+
+- id: "contact_address_title"
+  translation: "Address"
+
+- id: "contact_address_address"
+  translation: "Defined in i18n/en.yaml (contact_address_address)"
+
+- id: "contact_button"
+  translation: "Send Message"
+
+## Blog
+- id: "read_more"
+  translation: "Read more"
+
+- id: "published_on"
+  translation: "Published on "
+
+- id: "continue_reading"
+  translation: "Continue reading"
+
+## 404 Page
+- id: "404_title"
+  translation: "Page not found"
+- id: "404_description"  
+  translation: "Sorry, but the page you were looking for could not be found."
+- id: "404_button"
+  translation: "Back to homepage"
+
