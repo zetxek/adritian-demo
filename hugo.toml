@@ -120,7 +120,7 @@ weight = 3
 #  weight = 4
 
 [[languages.en.menus.header]]
-name = "Blog"
+name = "How to"
 URL = "/blog"
 weight = 5
 
