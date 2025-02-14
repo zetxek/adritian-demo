@@ -15,4 +15,16 @@ params:
 ##
 ---
 
-Working with this freelancer has been an exceptional experience. They consistently deliver high-quality work, demonstrating a keen eye for detail and a deep understanding of the project requirements. Their professionalism and commitment to excellence are evident in every task they undertake. They are not only skilled and knowledgeable but also incredibly reliable and easy to work with. I highly recommend this freelancer to anyone looking for top-tier talent and a dependable partner.
+The content of this section comes from the `content/testimonial` folder contents. This that you see is in `content/testimonial/graziella-nutella.md`.
+
+You can also use parameters for configuration:
+
+```
+name: "Nutting Hill" # place/city/country for the experience. Fill-in.
+position: "Nutcracker" # from-to, for example "2022-2024". Fill-in.
+
+params:
+    image:
+        x: "images/testimonials/testimonial1.png" # example: "images/clients/asgardia.png"
+        _2x: "images/testimonials/testimonial1@2x.png" # example: "images/clients/asgardia@2x.png"
+```
