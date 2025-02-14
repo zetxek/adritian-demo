@@ -22,7 +22,7 @@ test.describe('Home page', () => {
     const navLinks = [
       { selector: 'a[href="/#about"]', text: 'ABOUT' },
       { selector: 'a[href="/#portfolio"]', text: 'PORTFOLIO' },
-      { selector: 'a[href="/blog"]', text: 'BLOG' },
+      { selector: 'a[href="/blog"]', text: 'HOW TO' },
       { selector: 'a[href="/#contact"]', text: 'CONTACT' }
     ];
 
