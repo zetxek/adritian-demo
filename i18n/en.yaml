@@ -106,7 +106,7 @@
   translation:  '<p class="lead">
       Here you can add some information about you. A small excerpt that describes 
       your experience, for example.   
-      </br>
+      <br/>
       You explain something about your academic/study background, as well as your
       preferred areas of work.
       </p>
