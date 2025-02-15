@@ -118,10 +118,14 @@ testimonial:
 contact:
   enable: true
   form:
-    action: "#"
+    action: "/"
+    method: "GET"
   button:
     icon: "icon-email"
 
 # newsletter
 newsletter:
   enable: true
+  form:
+    action: "/"
+    method: "GET"
