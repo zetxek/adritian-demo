@@ -55,6 +55,9 @@ draft = false
     newsletter_error_message="Something went wrong, please try again."
     newsletter_note="We respect your privacy and won't share your data."
 >}}
+
+Additional content added after the `section` blocks:
+
 ```
 sections = [
   "showcase",
