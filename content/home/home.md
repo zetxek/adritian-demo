@@ -1,6 +1,6 @@
 +++
 title =  "Home"
-type = "homepage"
+type = "home"
 draft = false
 +++
 
@@ -34,9 +34,20 @@ This is the inner content.
 {{ /about-section %}}
 
 {{< education-list
-    title="Education" >}}
+    title="Formal Education" >}}
 
-## Experience
+{{< experience-section
+    title="My job experience (section)"
+    intro_title="Intro (intro_title)"
+    intro_description="Description (intro_description).<br>You can use HTML,with <strong>strong</strong> formatting, or lists <ul><li>one</li><li>two</li></ul>" 
+    button1_url="https://example.com"
+    button1_text="Visit Example"
+    button1_icon="icon-globe"
+    button2_text="Another Button (2)"
+    button3_text="Button #3"
+>}}
+## Experience (list)
+
 {{< experience-list >}}
  
 
