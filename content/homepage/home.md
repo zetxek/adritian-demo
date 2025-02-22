@@ -7,9 +7,9 @@ draft = false
 
 {{< showcase-section
     title="Showcase section"
-    subtitle="Subtitle"
+    subtitle="Subtitle - coming from <code>home.md</code>"
     buttonText="Email"
-    description="<strong>Strong</strong> and normal text"
+    description="<strong>Strong</strong> and normal text. This comes from <code>home.md</code>. Not provided? fallback to i18n"
     image="images/showcase/showcase.png"
     image2x="images/showcase/showcase@2x.png"
  >}}
@@ -17,9 +17,21 @@ draft = false
 
 {{< about-section
     title="About me"
-    content="...."
+    content="Using HTML <code><></code> delimiters</code>"
     about_button="Button text"
-     >}}
+    button_icon="info"
+    button_text="You can edit this"
+    button_url="https://www.google.com"
+    image="images/about/user-picture.png"
+    image2x="images/about/user-picture@2x.png"
+
+ >}}
+
+{{% about-section
+    title="About me"
+    about_button="Button text" %}}
+This is the inner content. 
+{{ /about-section %}}
 
 {{< education-list
     title="Education" >}}
