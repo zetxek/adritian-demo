@@ -9,11 +9,33 @@ draft = false
     title="Showcase section"
     subtitle="Subtitle - coming from <code>home.md</code>"
     buttonText="Email"
-    description="<strong>Strong</strong> and normal text. This comes from <code>home.md</code>. Not provided? fallback to i18n"
+    description="<strong>Strong</strong> and normal text. This comes from <code>home.md</code>. Not provided? fallback to i18n (for now, to offer compatibility with versions >1.7.0)"
     image="images/showcase/showcase.png"
     image2x="images/showcase/showcase@2x.png"
  >}}
 
+{{< platform-links >}}
+    {{< link icon="square-facebook" url="https://facebook.com/yourpage" >}}
+    {{< link icon="square-twitter" url="https://twitter.com/yourpage" >}}
+    {{< link icon="linkedin" url="https://www.linkedin.com/in/adrianmoreno/" >}}
+    {{< link icon="square-github" url="https://github.com/zetxek" >}}
+    {{< link icon="x-twitter" url="https://twitter.com/zetxek" >}}
+    {{< link icon="dribbble" url="#" >}}
+    {{< link icon="behance" url="#" >}}
+    {{< link icon="youtube" url="#" >}}
+    {{< link icon="instagram" url="https://www.instagram.com/zetxek/" >}}
+    {{< link icon="square-facebook" url="https://www.facebook.com/zetxek/" >}}
+    {{< link icon="codepen" url="#" >}}
+    {{< link icon="yelp" url="https://www.yelp.com/" >}}
+    {{< link icon="bluesky" url="https://www.bluesky.com/" >}}
+    {{< link icon="threads" url="https://www.threads.net/" >}}
+    {{< link icon="face-smile" url="https://www.adrianmoreno.info/" >}}
+    {{< link icon="user" url="https://www.adrianmoreno.info/" >}}
+    {{< link icon="quote-left" url="https://www.adrianmoreno.info/" >}}
+    {{< link icon="cloud-arrow-down" url="https://www.adrianmoreno.info/" >}}
+    {{< link icon="square-xing" url="https://www.adrianmoreno.info/" >}}
+
+{{< /platform-links >}}
 
 {{< about-section
     title="About me"
@@ -27,12 +49,6 @@ draft = false
 
  >}}
 
-{{% about-section
-    title="About me"
-    about_button="Button text" %}}
-This is the inner content. 
-{{ /about-section %}}
-
 {{< education-list
     title="Formal Education" >}}
 
@@ -45,6 +61,7 @@ This is the inner content.
     button1_icon="icon-globe"
     button2_text="Another Button (2)"
     button3_text="Button #3"
+    social_links="aaa"
 >}}
 ## Experience (list)
 
