@@ -37,12 +37,13 @@ draft = false
 
 {{< /platform-links >}}
 
+{{< /showcase-section >}}
+
 {{< about-section
     title="About me"
-    content="Using HTML <code><></code> delimiters</code>"
-    about_button="Button text"
-    button_icon="info"
-    button_text="You can edit this"
+    content="You can write <code>HTML</code>, as long as you <em>wrap it</em> accordingly."
+    button_icon="icon-user"
+    button_text="You can edit the text, link and icon"
     button_url="https://www.google.com"
     image="images/about/user-picture.png"
     image2x="images/about/user-picture@2x.png"
@@ -67,7 +68,6 @@ draft = false
 ## Experience (list)
 
 {{< experience-list >}}
- 
 
 {{< client-and-work-section
     title="A selection of my work" >}} 
@@ -82,7 +82,7 @@ draft = false
     contact_form_message="Your text"
     contact_button="Send message"
     contact_phone_title="My phone"
-    contact_phone_number="<a href='tel:+555 666 777'>"
+    contact_phone_number="<a href='tel:+555 666 777'>555 666 777</a>"
     contact_email_title="My mail"
     contact_email_email="demo@demosite.com"
     contact_address_title="My location"
@@ -97,17 +97,5 @@ draft = false
     newsletter_note="We respect your privacy and won't share your data."
 >}}
 
-Additional content added after the `section` blocks:
-
-```
-sections = [
-  "showcase",
-  "about",
-  "education",
-  "experience",
-  "client-and-work",
-  "testimonial",
-  "contact",
-  "newsletter",
-]
-```
+## Extra content
+Additional content added after the `section` blocks. Here you could freestyle, add other shortcodes, ...  Or just let the content empty, and rely on the shortcode sections alone.

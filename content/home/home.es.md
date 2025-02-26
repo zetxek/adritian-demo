@@ -35,6 +35,7 @@ draft = false
     {{< link icon="square-xing" url="https://www.adrianmoreno.info/" >}}
 
 {{< /platform-links >}}
+{{< /showcase-section >}}
 
 {{< about-section
     title="Sobre mí"
@@ -80,7 +81,7 @@ draft = false
     contact_form_message="Tu mensaje"
     contact_button="Enviar mensaje"
     contact_phone_title="Mi teléfono"
-    contact_phone_number="<a href='tel:+555 666 777'>"
+    contact_phone_number="<a href='tel:+555 666 777'>555 666 777</a>"
     contact_email_title="Mi correo"
     contact_email_email="demo@demosite.com"
     contact_address_title="Mi ubicación"
