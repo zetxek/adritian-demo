@@ -5,7 +5,8 @@ button1_text: Linkedin
 
 This is where you can highlight a bit over your experience. Years of total experience, specialization, etc.
 
-The content in this intro comes from the `i18n/en.yaml` file, in the `experience_description` item.
+The content in this intro comes from the `content/experience/_index.md` file.
+These kind of content, the "index pages", are called "branch bundles". You can read more about [**sections and bundles** in Hugo's docs](https://gohugo.io/content-management/sections/#template-selection).
 
 The content for each experience item (that you can click on the left) is defined in the `content/experience` folder, with one content item per experience, as in `job-1.md`, `job-2.md`, etc.
 
