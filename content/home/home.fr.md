@@ -61,7 +61,6 @@ draft = false
     button2_text="Autre bouton (2)"
     button3_text="Bouton #3"
     button3_url="/experience"
-    social_links="aaa"
 >}}
 ## Expérience (liste)
 
@@ -81,7 +80,7 @@ draft = false
     contact_form_message="Votre message"
     contact_button="Envoyer le message"
     contact_phone_title="Mon téléphone"
-    contact_phone_number="<a href='tel:+555 666 777'>555 666 777</a>"
+    contact_phone_number="<a href='tel:+555666777'>555 666 777</a>"
     contact_email_title="Mon e-mail"
     contact_email_email="demo@demosite.com"
     contact_address_title="Ma localisation"
