@@ -66,7 +66,8 @@ draft = false
     button3_url="/experience"
     social_links="aaa"
 >}}
-## Experience (list)
+
+## Experience (as list)
 
 {{< experience-list >}}
 
