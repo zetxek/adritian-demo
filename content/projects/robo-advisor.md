@@ -10,9 +10,7 @@ params:
         icon: "icon-arrow-right"
         btnText: "Case Study"
         URL: "https://www.adrianmoreno.info"
-    image:  
-        x: "images/works/robo-advisor.jpg"
-        _2x: "images/works/robo-advisor@2x.jpg"
+    image: "images/works/robo-advisor@2x.jpg"
     
 
 ## The content is used for the description of the project

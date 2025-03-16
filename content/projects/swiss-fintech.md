@@ -10,9 +10,7 @@ params:
         icon: "icon-arrow-right"
         btnText: "Case Study"
         URL: "https://www.adrianmoreno.info"
-    image:  
-        x: "images/works/swissfintech.jpg"
-        _2x: "images/works/swissfintech@2x.jpg"
+    image: "images/works/swissfintech@2x.jpg"
     
 
 ## The content is used for the description of the project
