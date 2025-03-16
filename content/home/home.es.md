@@ -9,8 +9,8 @@ draft = false
     subtitle="Subtítulo - proviene de <code>home.md</code>"
     buttonText="Correo"
     description="Texto en <strong>negrita</strong> y normal. Esto viene de <code>home.md</code>. ¿No proporcionado? se usa i18n por defecto (por ahora, para ofrecer compatibilidad con versiones >1.7.0)"
-    image="images/showcase/showcase.png"
-    image2x="images/showcase/showcase@2x.png"
+    imgSrc="images/showcase/showcase.png"
+    imgScale="0.5"
  >}}
 
 {{< platform-links >}}
@@ -39,13 +39,13 @@ draft = false
 
 {{< about-section
     title="Sobre mí"
-    content="Usando delimitadores HTML <code><></code>"
+    content="Usando <code>sintaxis HTML</code>"
     about_button="Texto del botón"
     button_icon="info"
     button_text="Puedes editar esto"
     button_url="https://www.google.com"
-    image="images/about/user-picture.png"
-    image2x="images/about/user-picture@2x.png"
+    imgSrc="images/about/user-picture.png"
+    imgScale="0.5"
  >}}
 
 {{< education-list
@@ -61,11 +61,12 @@ draft = false
     button2_text="Otro Botón (2)"
     button3_text="Ver todo"
     button3_url="/es/experience"
-    social_links="aaa"
 >}}
+
+
 ## Experiencia (lista)
 
-{{< experience-list >}}
+Puedes ver una versión alternativa, usando `experience-list` en [/cv](/cv).
  
 
 {{< client-and-work-section
@@ -81,11 +82,14 @@ draft = false
     contact_form_message="Tu mensaje"
     contact_button="Enviar mensaje"
     contact_phone_title="Mi teléfono"
-    contact_phone_number="<a href='tel:+555 666 777'>555 666 777</a>"
+    contact_phone_number="<a href='tel:+555666777'>555 666 777</a>"
     contact_email_title="Mi correo"
     contact_email_email="demo@demosite.com"
     contact_address_title="Mi ubicación"
-    contact_address_address="🇩🇰 Dinamarca" >}}
+    contact_address_address="🇩🇰 Dinamarca"
+    form_action="/"
+    form_method="POST"
+     >}}
 
 {{< newsletter-section 
     newsletter_title="Mantente actualizado"
@@ -94,19 +98,6 @@ draft = false
     newsletter_success_message="¡Gracias por suscribirte!"
     newsletter_error_message="Algo salió mal, por favor inténtalo de nuevo."
     newsletter_note="Respetamos tu privacidad y no compartiremos tus datos."
+    form_action="/"
+    form_method="POST"
 >}}
-
-Additional content added after the `section` blocks:
-
-```
-sections = [
-  "showcase",
-  "about",
-  "education",
-  "experience",
-  "client-and-work",
-  "testimonial",
-  "contact",
-  "newsletter",
-]
-```

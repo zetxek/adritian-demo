@@ -10,8 +10,8 @@ draft = false
     subtitle="Subtitle - coming from <code>home.md</code>"
     buttonText="Email"
     description="<strong>Strong</strong> and normal text. This comes from <a href='https://github.com/zetxek/adritian-demo/blob/main/content/home/home.md?plain=1'><code>home.md</code></a>, using the <code>showcase-section</code> shortcode.<br/>Below you can see the social links, provided by the <code>platform-links</code> shortcode."
-    image="images/showcase/showcase.png"
-    image2x="images/showcase/showcase@2x.png"
+    imgSrc="images/showcase/showcase.png"
+    imgScale="0.5"
  >}}
 
 {{< platform-links >}}
@@ -45,9 +45,8 @@ draft = false
     button_icon="icon-user"
     button_text="You can edit the text, link and icon"
     button_url="https://www.google.com"
-    image="images/about/user-picture.png"
-    image2x="images/about/user-picture@2x.png"
-
+    imgSrc="images/about/user-picture.png"
+    imgScale="0.5"
  >}}
 
 {{< education-list
@@ -64,9 +63,9 @@ draft = false
     button2_url="/experience"
     button3_text="Button #3"
     button3_url="/experience"
-    social_links="aaa"
 >}}
-## Experience (list)
+
+## Experience (as list)
 
 {{< experience-list >}}
 
@@ -83,11 +82,14 @@ draft = false
     contact_form_message="Your text"
     contact_button="Send message"
     contact_phone_title="My phone"
-    contact_phone_number="<a href='tel:+555 666 777'>555 666 777</a>"
+    contact_phone_number="<a href='tel:+555666777'>555 666 777</a>"
     contact_email_title="My mail"
     contact_email_email="demo@demosite.com"
     contact_address_title="My location"
-    contact_address_address="🇩🇰 Denmark" >}}
+    contact_address_address="🇩🇰 Denmark"
+    form_action="https://formspree.io/f/mail@example.com"
+    form_method="POST"
+>}}
 
 {{< newsletter-section 
     newsletter_title="Stay updated"
@@ -96,6 +98,8 @@ draft = false
     newsletter_success_message="Thank you for subscribing!"
     newsletter_error_message="Something went wrong, please try again."
     newsletter_note="We respect your privacy and won't share your data."
+    form_action="/"
+    form_method="POST"
 >}}
 
 ## Extra content

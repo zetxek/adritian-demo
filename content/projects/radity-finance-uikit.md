@@ -10,7 +10,9 @@ params:
         icon: "icon-arrow-right"
         btnText: "Case Study"
         URL: "https://www.adrianmoreno.info"
-    image: "images/works/radity-finance@2x.jpg"
+    image:
+        src: "images/works/radity-finance.jpg"
+        scale: 0.5
 
 ## The content is used for the description of the project
 ---

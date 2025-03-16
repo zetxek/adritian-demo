@@ -6,7 +6,8 @@ draft: false # set to "true" if you want to hide the content
 link: "https://www.adrianmoreno.info" # optional URL
 
 params:
-    logo: "images/clients/asgardia.png"
+    logo:
+      src: "images/clients/asgardia.png"
         
 ## The content is not used (yet). If you have ideas on how to use it, 
 ## you can suggest it at https://github.com/zetxek/adritian-free-hugo-theme/discussions 
