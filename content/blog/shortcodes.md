@@ -81,8 +81,8 @@ The shortcodes can be customized with different arguments:
 
 - `client-and-work-section`: this shortcode doesn't use as many arguments - as much of the content comes from other content pages.
   - `title`: The title of the client and work section.
-  - `clients`: A list of clients, coming from the `client` content type (each with `title`, `link`, `logo.x`, `logo_.2x`)
-  - `projects`: A list of projects, coming from the `project` content type (each with `title`, `content`, `button.URL`, `button.btnText`, `button.icon`, `image.x`, `image._2x`).
+  - `clients`: A list of clients, coming from the `client` content type (each with `title`, `link`, `logo`)
+  - `projects`: A list of projects, coming from the `project` content type (each with `title`, `content`, `button.URL`, `button.btnText`, `button.icon`, `image`).
 
 - `about-section`:
   - Content Arguments
@@ -90,7 +90,9 @@ The shortcodes can be customized with different arguments:
 
     - `intro_description` - Contains the HTML content or description text for the about section. Falls back to the content from site data if not provided.
 
-    - `image` - Specifies the path to the image displayed in the about section. Falls back to the image defined in site data if not provided.
+    - `imgSrc` - Specifies the path to the image displayed in the about section. Falls back to the image defined in site data if not provided.
+ 
+    - `imgScale` - Specifies the scale used for the image (for example, `0.5` if the high resolution image is double the size of the smaller one)
 
     - Primary Button Arguments
       - `button1_enable` - Boolean value to show or hide the primary button. Defaults to the value from site data.
@@ -117,8 +119,7 @@ The shortcodes can be customized with different arguments:
       - Meta Information:
         - `name`: The name of the person giving the testimonial
         - `position`: The job title or role of the person giving the testimonial
-        - `image.x`: Path to regular resolution image of the testimonial author
-        - `image._2x`: Path to high resolution (2x) image of the testimonial author for retina displays
+        - `image.src`: Path to the image of the testimonial author
 
 
 
@@ -132,8 +133,8 @@ The shortcodes can be customized with different arguments:
     - `button_icon`: Icon class to display before the button text. Falls back to the icon from site data.
     - `button_url`: Target URL for the button. Falls back to the URL from site data.
   - **Image Configuration**:
-    - `image`: Specifies the path to the regular resolution image displayed in the showcase section. Falls back to the image defined in site data.
-    - `image2x`: Specifies the path to the high resolution (2x) image for retina displays. Falls back to the image defined in site data.
+    - `imgSrc`: Specifies the path to the image displayed in the showcase section. Falls back to the image defined in site data.
+    - `imgScale` - Specifies the scale used for the image (for example, `0.5` if the high resolution image is double the size of the smaller one)
   - **Social Media**:
     - `social_links`: Array of social media platform links to display at the bottom of the showcase. Each item should have a URL and icon property.
   - **Inner Content**:

@@ -78,7 +78,7 @@ test.describe('Home page', () => {
       await checkImageElements('.image-left-overflow img');
     }
     
-    await checkImageElements('.client-works-container .picture img');
+    await checkImageElements('.client-works-container picture img');
     await checkImageElements('.testimonial__author .picture img');
   });
 });

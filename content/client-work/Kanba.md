@@ -7,8 +7,8 @@ link: "https://www.adrianmoreno.info" # optional URL to link the logo to
 
 params:
     logo:
-        x: "images/clients/kanba.png"
-        _2x: "images/clients/kanba@2x.png"
+        src: "images/clients/kanba.png"
+        scale: 0.5
 
 ## The content is not used (yet). If you have ideas on how to use it, 
 ## you can suggest it at https://github.com/zetxek/adritian-free-hugo-theme/discussions 
