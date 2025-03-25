@@ -17,8 +17,7 @@
   translation: "Genial"
 - id: "logo_text2"
   translation: "Nombre"
-- id: "nav_home"
-  translation: "INICIO"
+
 
 ## General
 - id: "skipToMainContent"
