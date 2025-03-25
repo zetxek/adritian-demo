@@ -21,9 +21,6 @@
 - id: "logo_text2"
   translation: "Demo"
 
-- id: "nav_home"
-  translation: "HOME"
-
 ## General
 - id: "skipToMainContent"
   translation: "Skip to main content"

@@ -17,8 +17,6 @@
   translation: "Cool"
 - id: "logo_text2"
   translation: "Nom"
-- id: "nav_home"
-  translation: "ACCUEIL"
   
 ## General
 - id: "skipToMainContent"
