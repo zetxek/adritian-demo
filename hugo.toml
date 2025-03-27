@@ -110,6 +110,10 @@ weight = 0
 
 [languages.en.menus]
 [[languages.en.menus.header]]
+name = "Home"
+URL = "/"
+weight = 1
+[[languages.en.menus.header]]
 name = 'About'
 URL = '#about'
 weight = 2
@@ -131,6 +135,11 @@ weight = 5
 name = "Contact"
 URL = "#contact"
 weight = 6
+
+[[languages.en.menus.footer]]
+name = "Home"
+URL = "/"
+weight = 1
 
 [[languages.en.menus.footer]]
 name = "About"
@@ -156,6 +165,10 @@ languageName = 'Español'
 title = ''
 weight = 0
 [[languages.es.menus.header]]
+name = "INICIO"
+URL = "/es/"
+weight = 1
+[[languages.es.menus.header]]
 name = 'Sobre mi'
 URL = '/es/#about'
 weight = 2
@@ -178,6 +191,11 @@ weight = 5
 name = "Contacto"
 URL = "/es/#contact"
 weight = 6
+
+[[languages.es.menus.footer]]
+name = "INICIO"
+URL = "/"
+weight = 1
 
 [[languages.es.menus.footer]]
 name = "Sobre mi"
@@ -204,6 +222,10 @@ weight = 0
 
 [languages.fr.menus]
 [[languages.fr.menus.header]]
+name = "ACCUEIL"
+URL = "/fr/"
+weight = 1
+[[languages.fr.menus.header]]
 name = 'About'
 URL = '#about'
 weight = 2
@@ -225,6 +247,11 @@ weight = 5
 name = "Contact"
 URL = "#contact"
 weight = 6
+
+[[languages.fr.menus.footer]]
+name = "ACCUEIL"
+URL = "/fr/"
+weight = 1
 
 [[languages.fr.menus.footer]]
 name = "About"
