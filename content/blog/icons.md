@@ -39,7 +39,7 @@ You can see them rendered here:
 - `medium`: {{< link icon="medium" url="https://example.com" >}}
 - `stack-overflow`: {{< link icon="stack-overflow" url="https://example.com" >}}
 - `meetup`: {{< link icon="meetup" url="https://example.com" >}}
-
+- `tiktok`: {{< link icon="tiktok" url="https://example.com" >}}
 
 
 Do you need more icons?
