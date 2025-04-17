@@ -67,7 +67,8 @@ draft = false
 
 ## Experience (as list)
 
-{{< experience-list >}}
+{{< experience-list
+    padding="false" >}}
 
 {{< client-and-work-section
     title="A selection of my work" >}} 
@@ -75,32 +76,18 @@ draft = false
 {{< testimonial-section
     title="What they say about me" >}}
 
-{{< contact-section
-    title="Reach out" 
-    contact_form_name="Your name?"
-    contact_form_email="Your e-mail"
-    contact_form_message="Your text"
-    contact_button="Send message"
-    contact_phone_title="My phone"
-    contact_phone_number="<a href='tel:+555666777'>555 666 777</a>"
-    contact_email_title="My mail"
-    contact_email_email="demo@demosite.com"
-    contact_address_title="My location"
-    contact_address_address="🇩🇰 Denmark"
-    form_action="https://formspree.io/f/mail@example.com"
-    form_method="POST"
+
+## Extra home content
+
+Additional content added after the `section` blocks, in the `home.md` file. 
+
+Here you could freestyle, add other shortcodes, ...  Or just let the content empty, and rely on the shortcode sections alone.
+
+{{< text-section
+title="Extra (centered) content"
+centered="true"
 >}}
 
-{{< newsletter-section 
-    newsletter_title="Stay updated"
-    newsletter_placeholder="Enter your email"
-    newsletter_button="Subscribe"
-    newsletter_success_message="Thank you for subscribing!"
-    newsletter_error_message="Something went wrong, please try again."
-    newsletter_note="We respect your privacy and won't share your data."
-    form_action="/"
-    form_method="POST"
->}}
+You can also use the `text-section` shortcode to add centered texts
 
-## Extra content
-Additional content added after the `section` blocks. Here you could freestyle, add other shortcodes, ...  Or just let the content empty, and rely on the shortcode sections alone.
+{{< /text-section >}}

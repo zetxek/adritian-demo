@@ -74,30 +74,3 @@ Puedes ver una versión alternativa, usando `experience-list` en [/cv](/cv).
 
 {{< testimonial-section
     title="Lo que dicen de mí" >}}
-
-{{< contact-section
-    title="Contacto" 
-    contact_form_name="¿Tu nombre?"
-    contact_form_email="Tu correo"
-    contact_form_message="Tu mensaje"
-    contact_button="Enviar mensaje"
-    contact_phone_title="Mi teléfono"
-    contact_phone_number="<a href='tel:+555666777'>555 666 777</a>"
-    contact_email_title="Mi correo"
-    contact_email_email="demo@demosite.com"
-    contact_address_title="Mi ubicación"
-    contact_address_address="🇩🇰 Dinamarca"
-    form_action="/"
-    form_method="POST"
-     >}}
-
-{{< newsletter-section 
-    newsletter_title="Mantente actualizado"
-    newsletter_placeholder="Introduce tu correo"
-    newsletter_button="Suscribirse"
-    newsletter_success_message="¡Gracias por suscribirte!"
-    newsletter_error_message="Algo salió mal, por favor inténtalo de nuevo."
-    newsletter_note="Respetamos tu privacidad y no compartiremos tus datos."
-    form_action="/"
-    form_method="POST"
->}}

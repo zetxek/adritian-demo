@@ -24,7 +24,8 @@ The theme provides custom shortcodes to allow you to customize your landing page
 - `client-and-work-section`: Displays a section for clients and work.
 - `about-section`: About section, with image, buttons for call to action and image.
 - `testimonial-section`: Adds references from customers, colleagues, etc.
-- `showcase`: 
+- `showcase`: two-column block with a full-width image to the left, and a text snippet to the right. Great for a call to action or introduction of the person (assuming it's a personal website).
+- `text-section`: utility shortcode used to render text in some parts of the theme where it would otherwise be full-width, appearing "too floaty". See [the github issue #260 for context](https://github.com/zetxek/adritian-free-hugo-theme/issues/260).
 
 The shortcodes can be customized with different arguments:
 
@@ -145,6 +146,18 @@ The shortcodes can be customized with different arguments:
     - `social_links`: Array of social media platform links to display at the bottom of the showcase. Each item should have a URL and icon property.
   - **Inner Content**:
     - The shortcode can also accept inner content that will be rendered in a separate div with class "inner-content".
+
+- `text-section`: 
+  - **Content Arguments**:
+    - `title`: Sets the main heading/title for the text section (optional).
+    - `subtitle`: Sets the subtitle text that appears below the main heading (optional).
+  - **Layout Options**:
+    - `padding`: Controls whether the section has padding. Set to "true" by default.
+    - `centered`: When set to "true", adds flexbox classes to center the content both horizontally and vertically. Set to "false" by default.
+  - **Inner Content**:
+    - The shortcode accepts markdown-formatted inner content that will be rendered in the text section.
+
+
 
 You can see them in effect in:
 - [the homepage](/) [`(see source)`](https://raw.githubusercontent.com/zetxek/adritian-demo/refs/heads/main/content/home.md).
