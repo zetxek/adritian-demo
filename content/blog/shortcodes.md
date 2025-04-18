@@ -26,6 +26,7 @@ The theme provides custom shortcodes to allow you to customize your landing page
 - `testimonial-section`: Adds references from customers, colleagues, etc.
 - `showcase`: two-column block with a full-width image to the left, and a text snippet to the right. Great for a call to action or introduction of the person (assuming it's a personal website).
 - `text-section`: utility shortcode used to render text in some parts of the theme where it would otherwise be full-width, appearing "too floaty". See [the github issue #260 for context](https://github.com/zetxek/adritian-free-hugo-theme/issues/260).
+- `spacer`: Adds vertical spacing before the next element.
 
 The shortcodes can be customized with different arguments:
 
@@ -161,7 +162,14 @@ The shortcodes can be customized with different arguments:
   - **Inner Content**:
     - The shortcode accepts markdown-formatted inner content that will be rendered in the text section.
 
-
+- `spacer`: 
+  - **Size Options**:
+    - `size`: Controls the amount of vertical spacing. Accepts "small", "medium" (default), "large", or "xlarge".
+  - **Usage Examples**:
+    - `{{</* spacer */>}}`: Adds medium spacing (default)
+    - `{{</* spacer size="small" */>}}`: Adds minimal spacing
+    - `{{</* spacer size="large" */>}}`: Adds substantial spacing
+    - `{{</* spacer size="xlarge" */>}}`: Adds maximum spacing
 
 You can see them in effect in:
 - [the homepage](/) [`(see source)`](https://raw.githubusercontent.com/zetxek/adritian-demo/refs/heads/main/content/home.md).
