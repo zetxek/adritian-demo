@@ -65,9 +65,8 @@ draft = false
     button3_url="/experience"
 >}}
 
-## Experience (as list)
-
 {{< experience-list
+    title="Experience (as list)"
     padding="false" >}}
 
 {{< client-and-work-section

@@ -34,8 +34,10 @@ The shortcodes can be customized with different arguments:
   - `items`: A list of educational qualifications, they're provided by the `education` content type pages. From each, the `year`, `university`, and `degree` will be used.  
 
 - `experience-list`:
-  - `title`: The title of the experience section.
+  - `title`: The title of the experience section (optional). When provided, an h2 heading is added above the list.
+  - `padding`: Controls whether the section has padding. Set to "true" by default.
   - `items`: A list of professional experiences, coming from the `experience` content type. For each of them, the `companyLogo`, `duration`, `jobTitle`, `location`, and `Content` are used.
+  - **Note**: On mobile devices, a separator line is automatically added between experience entries for better readability.
 
 - `platform-links`:
   - `platforms`: A container to place social links inside. Usually you'll want to use it with a list of `link` nested (see below) 
@@ -144,6 +146,8 @@ The shortcodes can be customized with different arguments:
     - `imgScale` - Specifies the scale used for the image (for example, `0.5` if the high resolution image is double the size of the smaller one) This is only considered if neither imgWidth nor imgHeight is used.
   - **Social Media**:
     - `social_links`: Array of social media platform links to display at the bottom of the showcase. Each item should have a URL and icon property.
+  - **Responsive Behavior**:
+    - The showcase uses a two-column layout on desktop devices (≥768px) and stacks columns vertically on mobile devices, with the image appearing above the text content.
   - **Inner Content**:
     - The shortcode can also accept inner content that will be rendered in a separate div with class "inner-content".
 
