@@ -2,6 +2,10 @@
 title = 'Icons'
 date = 2025-02-28T08:05:05+01:00
 draft = false
+featured = true
+weight = 100
+[images]
+  featured_image= '/img/blog/icons.png'
 +++
 
 The theme has multiple icons available for use.
