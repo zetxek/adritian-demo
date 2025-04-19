@@ -331,7 +331,7 @@ mobileHeader = false
 ## by default we allow override AND automatic selection
 
 [params.blog]
-layout = "default"     # options: default, sidebar
+layout = "sidebar-right"     # options: default, sidebar
 sidebarWidth = "25"    # percentage width of the sidebar
 showCategories = true
 showRecentPosts = true
