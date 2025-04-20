@@ -2,9 +2,6 @@ baseURL = "https://adritian-demo.vercel.app/"
 title = "Adritian Demo"
 languageCode = "en"
 
-
-[outputs]
-	home = ["HTML","RSS","JSON"]
  
 [markup.goldmark.renderer]
 unsafe = true
@@ -12,7 +9,7 @@ unsafe = true
 # Exclude footer section from generating list pages (index.html and index.xml)
 [outputs]
   page = ["HTML"]
-  home = ["HTML", "RSS"]
+  home = ["HTML", "RSS", "JSON"]
   section = ["HTML", "RSS"]
   taxonomy = ["HTML", "RSS"]
   term = ["HTML", "RSS"]
