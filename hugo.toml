@@ -2,6 +2,10 @@ baseURL = "https://adritian-demo.vercel.app/"
 title = "Adritian Demo"
 languageCode = "en"
 
+
+[outputs]
+	home = ["HTML","RSS","JSON"]
+ 
 [markup.goldmark.renderer]
 unsafe = true
 
@@ -104,7 +108,10 @@ code = "GTM-XXXXX"
 enabled = false
 
 [build]
+writeStats = true
+
 [build.buildStats]
+enabledFor = ["scss"]
 disableClasses = false
 disableIDs = false
 disableTags = false
@@ -331,12 +338,14 @@ mobileHeader = false
 ## by default we allow override AND automatic selection
 
 [params.blog]
-layout = "sidebar-right"     # options: default, sidebar
+layout = "sidebar-right"     # options: default (no sidebar), sidebar, sidebar-right
 sidebarWidth = "25"    # percentage width of the sidebar
 showCategories = true
 showRecentPosts = true
 recentPostCount = 5
 listStyle = "summary"  # options: simple, summary
+featured_sort_by_weight = true
+featured_sort_by_date = false
 
 
 [params.experience]
