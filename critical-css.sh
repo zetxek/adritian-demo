@@ -13,7 +13,12 @@ fi
 # Ensure the assets/css directory exists
 mkdir -p ./assets/css
 
-# Run critical CSS generator
-./node_modules/critical/cli.js public/index.html --base public > ./assets/css/critical.css
+# Run critical CSS generator with additional launch options for Puppeteer
+# --penthouse-ignore-errors makes the process continue despite JS errors
+# --penthouse-browser-args adds Chrome flags to fix common launch issues
+./node_modules/critical/cli.js public/index.html --base public \
+  --penthouse-ignore-errors \
+  --penthouse-browser-args="--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage" \
+  > ./assets/css/critical.css
 
 echo "Done running critical-css"
