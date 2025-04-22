@@ -18,6 +18,7 @@
     "autoprefixer": "^10.4.17",
     "bootstrap": "^5.3.3",
     "bootstrap-print-css": "^1.0.0",
+    "critical": "^7.2.1",
     "postcss": "^8.4.35",
     "postcss-cli": "^11.0.0"
   },
