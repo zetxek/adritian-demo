@@ -7,6 +7,6 @@ company: "Internet Affairs Inc."
 location: "Stavanger, Norvège"
 duration: "2023-2024"
 ---
-### Réparer le monde, un octet à la fois
+## Réparer le monde, un octet à la fois
 
 Poursuivant la quête.

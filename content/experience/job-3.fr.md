@@ -7,6 +7,6 @@ company: "Internet Affairs Inc."
 location: "Stavanger, Norvège"
 duration: "2024-maintenant"
 ---
-### Réparer le monde, un octet à la fois
+## Réparer le monde, un octet à la fois
 
 Prise de contrôle hostile - qui est le patron maintenant !
