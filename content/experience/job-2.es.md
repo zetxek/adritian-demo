@@ -7,6 +7,6 @@ company: "Internet Affairs Inc."
 location: "Stavanger, Noruega"
 duration: "2023-2024"
 ---
-### Arreglando el mundo, un byte a la vez
+## Arreglando el mundo, un byte a la vez
 
 Continuando la misión.

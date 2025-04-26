@@ -8,6 +8,6 @@ location: "Stavanger, Norway"
 duration: "2024-now"
 
 ---
-### 3rd job: Gerente General
+## 3rd job: Gerente General
 
 Con una traducción al español, se puede llegar a cualquier parte.
