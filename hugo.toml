@@ -197,11 +197,11 @@ URL = "/es/"
 weight = 1
 [[languages.es.menus.header]]
 name = 'Sobre mi'
-URL = '/es/#about'
+URL = '/es/#sobre-mi'
 weight = 2
 [[languages.es.menus.header]]
-name = 'Portfolio'
-URL = '/es/#portfolio'
+name = 'Trabajo'
+URL = '/es/#trabajo'
 weight = 3
 
 #  [[languages.es.menus.header]]
@@ -217,7 +217,7 @@ weight = 5
 [[languages.es.menus.header]]
 pre = "email"
 name = "Contacto"
-URL = "/es/#contact"
+URL = "/es/#contacto"
 weight = 6
 
 [[languages.es.menus.header]]
