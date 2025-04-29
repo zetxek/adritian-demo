@@ -11,9 +11,10 @@ draft = false
     description="Texto en <strong>negrita</strong> y normal. Esto viene de <code>home.md</code>. ¿No proporcionado? se usa i18n por defecto (por ahora, para ofrecer compatibilidad con versiones >1.7.0)"
     imgSrc="images/showcase/showcase.png"
     imgScale="0.5"
+    sectionId="seccion-destacada"
  >}}
 
-{{< platform-links >}}
+{{< platform-links sectionId="social" >}}
     {{< link icon="square-facebook" url="https://facebook.com/yourpage" >}}
     {{< link icon="square-twitter" url="https://twitter.com/yourpage" >}}
     {{< link icon="linkedin" url="https://www.linkedin.com/in/adrianmoreno/" >}}
@@ -46,10 +47,12 @@ draft = false
     button_url="https://www.google.com"
     imgSrc="images/about/user-picture.png"
     imgScale="0.5"
+    sectionId="sobre-mi"
  >}}
 
 {{< education-list
-    title="Formación académica" >}}
+    title="Formación académica"
+    sectionId="formacion-academica" >}}
 
 {{< experience-section
     title="Mi experiencia laboral (sección)"
@@ -61,6 +64,7 @@ draft = false
     button2_text="Otro Botón (2)"
     button3_text="Ver todo"
     button3_url="/es/experience"
+    sectionId="experiencia-laboral"
 >}}
 
 
@@ -70,7 +74,9 @@ Puedes ver una versión alternativa, usando `experience-list` en [/cv](/cv).
  
 
 {{< client-and-work-section
-    title="Una selección de mi trabajo" >}} 
+    title="Una selección de mi trabajo"
+    sectionId="trabajo" >}} 
 
 {{< testimonial-section
-    title="Lo que dicen de mí" >}}
+    title="Lo que dicen de mí"
+    sectionId="testimonios" >}}

@@ -33,20 +33,24 @@ The shortcodes can be customized with different arguments:
 - `education-list`:
   - `title`: The title of the education section.
   - `items`: A list of educational qualifications, they're provided by the `education` content type pages. From each, the `year`, `university`, and `degree` will be used.  
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `experience-list`:
   - `title`: The title of the experience section (optional). When provided, an h2 heading is added above the list.
   - `padding`: Controls whether the section has padding. Set to "true" by default.
   - `items`: A list of professional experiences, coming from the `experience` content type. For each of them, the `companyLogo`, `duration`, `jobTitle`, `location`, and `Content` are used.
   - **Note**: On mobile devices, a separator line is automatically added between experience entries for better readability.
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `platform-links`:
   - `platforms`: A container to place social links inside. Usually you'll want to use it with a list of `link` nested (see below) 
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `link`: links to social platforms (facebook, linkedin, etc)
   - `url`: The URL for the hyperlink.
   - `icon`: The icon to display with the link.
-   
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
+
 - `newsletter-section`:
   - **Form Configuration**:
     - `form_action`: The URL where the newsletter form data will be submitted. Falls back to site data configuration (typically set in data/homepage.yaml).
@@ -59,10 +63,12 @@ The shortcodes can be customized with different arguments:
     - `newsletter_success_message`: Message displayed to users after successful subscription. Falls back to i18n value "newsletter_success_message".
     - `newsletter_error_message`: Message displayed to users if subscription fails. Falls back to i18n value "newsletter_error_message".
     - `newsletter_note`: Small text/disclaimer shown below the form (typically mentions privacy policy). Falls back to i18n value "newsletter_note".
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `experience-section`:
   - `title`: The title of the experience section.
   - `experiences`: A detailed list of experiences, coming from the `experience` content type pages.
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `contact-section`:
   - `title`: Sets the main heading/title for the contact section. Falls back to the i18n value "contact_title" if not provided.
@@ -81,12 +87,13 @@ The shortcodes can be customized with different arguments:
     - `contact_email_email`: Email address to display. Falls back to i18n value.
     - `contact_address_title`: Heading for the address section. Falls back to i18n value.
     - `contact_address_address`: Physical address or location information. Falls back to i18n value.
-
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `client-and-work-section`: this shortcode doesn't use as many arguments - as much of the content comes from other content pages.
   - `title`: The title of the client and work section.
   - `clients`: A list of clients, coming from the `client` content type (each with `title`, `link`, `logo`)
   - `projects`: A list of projects, coming from the `project` content type (each with `title`, `content`, `button.URL`, `button.btnText`, `button.icon`, `image`).
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `about-section`:
   - Content Arguments
@@ -120,6 +127,8 @@ The shortcodes can be customized with different arguments:
 
       - `button2_text` - Text label to display on the secondary button. Falls back to the text from site data.
 
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
+
   - `testimonial-section`:
     - `title`: The title of the testimonial section.
     - `testimonials`: A list of testimonials, provided by the `testimonial` content type pages. The partial dynamically pulls content from pages with type "testimonial". Each testimonial page should include:
@@ -128,8 +137,7 @@ The shortcodes can be customized with different arguments:
         - `name`: The name of the person giving the testimonial
         - `position`: The job title or role of the person giving the testimonial
         - `image.src`: Path to the image of the testimonial author
-
-
+    - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `showcase`: 
   - **Content Arguments**:
@@ -151,6 +159,7 @@ The shortcodes can be customized with different arguments:
     - The showcase uses a two-column layout on desktop devices (≥768px) and stacks columns vertically on mobile devices, with the image appearing above the text content.
   - **Inner Content**:
     - The shortcode can also accept inner content that will be rendered in a separate div with class "inner-content".
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `text-section`: 
   - **Content Arguments**:
@@ -161,6 +170,7 @@ The shortcodes can be customized with different arguments:
     - `centered`: When set to "true", adds flexbox classes to center the content both horizontally and vertically. Set to "false" by default.
   - **Inner Content**:
     - The shortcode accepts markdown-formatted inner content that will be rendered in the text section.
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 - `spacer`: 
   - **Size Options**:
@@ -170,6 +180,7 @@ The shortcodes can be customized with different arguments:
     - `{{</* spacer size="small" */>}}`: Adds minimal spacing
     - `{{</* spacer size="large" */>}}`: Adds substantial spacing
     - `{{</* spacer size="xlarge" */>}}`: Adds maximum spacing
+  - `sectionId`: Optional. Overrides the default HTML id for the section. If not provided, the default id is used.
 
 You can see them in effect in:
 - [the homepage](/) [`(see source)`](https://raw.githubusercontent.com/zetxek/adritian-demo/refs/heads/main/content/home.md).
