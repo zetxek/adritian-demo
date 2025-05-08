@@ -78,7 +78,9 @@ The shortcodes can be customized with different arguments:
   - **Form Field Placeholders**:
     - `contact_form_name`: Placeholder text for the name input field. Falls back to i18n value.
     - `contact_form_email`: Placeholder text for the email input field. Falls back to i18n value.
+    - `contact_form_phone`: Placeholder text for the phone input field. Falls back to i18n value.
     - `contact_form_message`: Placeholder text for the message textarea. Falls back to i18n value.
+    - `contact_form_rows`: Number of rows for the message textarea. Defaults to 2 if not specified.
     - `contact_button`: Text for the form submission button. Falls back to i18n value.
   - **Contact Information**:
     - `contact_phone_title`: Heading for the phone contact section. Falls back to i18n value.
