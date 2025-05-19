@@ -43,8 +43,8 @@ draft = false
     title="About me"
     content="This content is using the <code>about-section</code> shortcode. <br/>You can write <code>HTML</code>, as long as you <em>wrap it</em> accordingly. "
     button_icon="icon-user"
-    button_text="You can edit the text, link and icon"
-    button_url="https://www.google.com"
+    button_text="Check my skills"
+    button_url="/skills"
     imgSrc="images/about/user-picture.png"
     imgScale="0.5"
  >}}
