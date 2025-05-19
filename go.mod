@@ -2,7 +2,7 @@ module github.com/zetxek/adritian-demo
 
 go 1.23
 
-require github.com/zetxek/adritian-free-hugo-theme v1.7.20
+require github.com/zetxek/adritian-free-hugo-theme v1.7.21-0.20250519180838-07ad2dbf7d7f
 
 // for local development
 // replace github.com/zetxek/adritian-free-hugo-theme => ../adritian-free-hugo-theme
