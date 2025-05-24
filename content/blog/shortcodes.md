@@ -14,6 +14,7 @@ Some of the example built-in shortcodes are Instagram posts, YouTube videos, QR 
 
 The theme provides custom shortcodes to allow you to customize your landing page as you want:
 
+- `toc`: Generates a styled table of contents from page headings.
 - `education-list`: Displays a list of educational qualifications.
 - `experience-list`: Shows a list of professional experiences.
 - `platform-links`: Embeds links to various platforms with icons.
@@ -29,6 +30,23 @@ The theme provides custom shortcodes to allow you to customize your landing page
 - `spacer`: Adds vertical spacing before the next element.
 
 The shortcodes can be customized with different arguments:
+
+- `toc`: Automatically generates a table of contents from the page's headings (H2, H3, etc.)
+  - `heading`: Custom heading text for the table of contents. Defaults to "Table of Contents".
+  - `showHeading`: Boolean value to show or hide the heading. Defaults to true.
+  - `class`: Custom CSS class for styling. Defaults to "table-of-contents".
+  - **Features**:
+    - Only displays if the page contains headings
+    - Supports nested heading levels with proper indentation
+    - Responsive design with dark mode support
+    - Smooth scrolling to sections
+    - Clean, modern styling with hover effects
+  - **Usage Examples**:
+    - `{{</* toc */>}}`: Basic table of contents with default settings
+    - `{{</* toc heading="Contents" */>}}`: Custom heading
+    - `{{</* toc showHeading=false */>}}`: Hide the heading
+    - `{{</* toc class="sidebar-toc" */>}}`: Custom CSS class
+    - `{{</* toc heading="Article Contents" class="custom-toc" */>}}`: Multiple parameters
 
 - `education-list`:
   - `title`: The title of the education section.
@@ -110,6 +128,8 @@ The shortcodes can be customized with different arguments:
     - `imgHeight` - Specifies the height for the image.
 
     - `imgScale` - Specifies the scale used for the image (for example, `0.5` if the high resolution image is double the size of the smaller one) This is only considered if neither imgWidth nor imgHeight is used.
+
+    - `text_align` - Controls the vertical alignment of the text content relative to the image. Accepts "center" (default), "top", or "bottom".
 
     - Primary Button Arguments
       - `button1_enable` - Boolean value to show or hide the primary button. Defaults to the value from site data.

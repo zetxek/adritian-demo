@@ -138,9 +138,13 @@ name = 'About'
 URL = '#about'
 weight = 2
 [[languages.en.menus.header]]
+name = 'Skills'
+URL = '/skills'
+weight = 3
+[[languages.en.menus.header]]
 name = 'Portfolio'
 URL = '#portfolio'
-weight = 3
+weight = 4
 #  [[languages.en.menus.header]]
 #  name = "Experience"
 #  URL = "#experience"
@@ -200,9 +204,13 @@ name = 'Sobre mi'
 URL = '/es/#sobre-mi'
 weight = 2
 [[languages.es.menus.header]]
+name = 'Habilidades'
+URL = '/es/skills'
+weight = 3
+[[languages.es.menus.header]]
 name = 'Trabajo'
 URL = '/es/#trabajo'
-weight = 3
+weight = 4
 
 #  [[languages.es.menus.header]]
 #  name = "Experiencia"
@@ -264,9 +272,13 @@ name = 'About'
 URL = '#about'
 weight = 2
 [[languages.fr.menus.header]]
+name = 'Compétences'
+URL = '/fr/skills'
+weight = 3
+[[languages.fr.menus.header]]
 name = 'Portfolio'
 URL = '#portfolio'
-weight = 3
+weight = 4
 #  [[languages.fr.menus.header]]
 #  name = "Experience"
 #  URL = "#experience"
@@ -354,6 +366,10 @@ header = false
 mobileHeader = false
 ## by default we allow override AND automatic selection
 
+# Page transition settings
+[params.pageTransition]
+enabled = true  # Set to false to disable the page fade transition effect
+
 [params.blog]
 layout = "sidebar-right"     # options: default (no sidebar), sidebar, sidebar-right
 sidebarWidth = "25"    # percentage width of the sidebar
@@ -367,3 +383,35 @@ featured_sort_by_date = false
 
 [params.experience]
 showJobCard = true # Set to false to hide the job card
+
+
+# Performance optimizations
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    lineNos = false
+    style = "github"
+
+[imaging]
+  resampleFilter = "Lanczos"
+  quality = 85
+  anchor = "Smart"
+
+[minify]
+  disableCSS = false
+  disableHTML = false
+  disableJS = false
+  disableJSON = false
+  disableSVG = false
+  disableXML = false
+  minifyOutput = true
+  [minify.tdewolff]
+    [minify.tdewolff.html]
+      keepDefaultAttrVals = true
+      keepWhitespace = false
+    [minify.tdewolff.css]
+      precision = 0
+    [minify.tdewolff.js]
+      precision = 0
