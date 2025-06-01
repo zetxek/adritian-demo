@@ -33,9 +33,29 @@ jobs:
           git config --global user.email 'bot@noreply.github.com'
           git config --global --add --bool push.autoSetupRemote true
           
-          # Create new branch
-          BRANCH_NAME="module-update/$(date +%Y-%m-%d)"
-          git checkout -b $BRANCH_NAME
+          # Fetch latest changes from remote first
+          git fetch origin
+          
+          # Create unique branch name with timestamp to avoid conflicts
+          TIMESTAMP=$(date +%Y-%m-%d-%H%M%S)
+          DAILY_BRANCH="module-update/$(date +%Y-%m-%d)"
+          
+          # Check if a daily branch exists and delete any local version
+          if git show-ref --verify --quiet "refs/heads/$DAILY_BRANCH"; then
+            echo "Deleting existing local daily branch..."
+            git branch -D "$DAILY_BRANCH"
+          fi
+          
+          # Check if remote daily branch exists
+          if git ls-remote --heads origin "$DAILY_BRANCH" | grep -q "$DAILY_BRANCH"; then
+            echo "Found existing remote daily branch, checking it out and updating..."
+            git checkout -b "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
+            BRANCH_NAME="$DAILY_BRANCH"
+          else
+            echo "Creating new timestamped branch: module-update/${TIMESTAMP}"
+            git checkout -b "module-update/${TIMESTAMP}"
+            BRANCH_NAME="module-update/${TIMESTAMP}"
+          fi
           
           # Store original module version
           OLD_VERSION=$(hugo mod graph | grep -o '@v[0-9]*\.[0-9]*\.[0-9]*' | head -n1)
@@ -47,7 +67,7 @@ jobs:
           # Get new module version
           NEW_VERSION=$(hugo mod graph | grep -o '@v[0-9]*\.[0-9]*\.[0-9]*' | head -n1)
           
-          # Commit and push if there are changes
+          # Check if there are any changes
           if [[ -n $(git status -s) ]]; then
             # Update package.json
             hugo mod npm pack
@@ -55,9 +75,23 @@ jobs:
 
             # Add changes
             git add go.mod go.sum
-            git add package.json package-lock.json
+            if [[ -f package.json ]]; then
+              git add package.json
+            fi
+            if [[ -f package-lock.json ]]; then
+              git add package-lock.json
+            fi
+            
             git commit -m "Update Hugo modules from ${OLD_VERSION} to ${NEW_VERSION}"
-            git push origin $BRANCH_NAME
+            
+            # Push the changes - use force-with-lease for daily branches, regular push for timestamped branches
+            if [[ "$BRANCH_NAME" == "module-update/$(date +%Y-%m-%d)" ]]; then
+              echo "Pushing updates to existing daily branch..."
+              git push origin "$BRANCH_NAME" --force-with-lease
+            else
+              echo "Pushing new timestamped branch..."
+              git push origin "$BRANCH_NAME"
+            fi
             
             PR_BODY="🤖 Automated update of Hugo modules.
             
@@ -65,12 +99,21 @@ jobs:
             
             Created by Github action: https://github.com/zetxek/adritian-demo/actions/workflows/update-hugo-module.yml"
 
-            # Create PR
-            gh pr create \
-              -B main \
-              -H $BRANCH_NAME \
-              --title "[auto] Update Hugo modules ${OLD_VERSION} → ${NEW_VERSION}" \
-              --body "$PR_BODY"
+            # Check if PR already exists for this branch
+            if ! gh pr list --head "$BRANCH_NAME" --state open | grep -q "$BRANCH_NAME"; then
+              # Create PR only if it doesn't exist
+              gh pr create \
+                -B main \
+                -H "$BRANCH_NAME" \
+                --title "[auto] Update Hugo modules ${OLD_VERSION} → ${NEW_VERSION}" \
+                --body "$PR_BODY"
+            else
+              echo "PR already exists for branch $BRANCH_NAME, updating it..."
+              # Update the existing PR
+              gh pr edit "$BRANCH_NAME" \
+                --title "[auto] Update Hugo modules ${OLD_VERSION} → ${NEW_VERSION}" \
+                --body "$PR_BODY"
+            fi
           else
             echo "No updates found"
           fi
