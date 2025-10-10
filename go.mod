@@ -4,4 +4,4 @@ go 1.23
 
 // for local development
 
-require github.com/zetxek/adritian-free-hugo-theme v1.7.32 // indirect
+require github.com/zetxek/adritian-free-hugo-theme v1.7.33-0.20251010130520-bf923449b569 // indirect
