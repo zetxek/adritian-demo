@@ -182,6 +182,7 @@ jobs:
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git add i18n/ content/ .github/docs/ || true
+          git clean -fd  # Remove untracked files like theme-checkout/
 
           # Create detailed commit message
           git commit -m "Sync content from theme" \
