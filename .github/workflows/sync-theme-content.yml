@@ -1,0 +1,209 @@
+name: Sync Theme Content
+
+# This workflow syncs content (i18n files, example content) from the theme repository
+# when theme updates are made, especially when PRs in the theme repo contain new
+# languages, configurations, or demo content.
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  # Triggered by the theme repository via repository_dispatch
+  repository_dispatch:
+    types: [sync-theme-content]
+  
+  # Can be manually triggered to sync content for an existing PR
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to sync content for'
+        required: false
+        type: string
+      theme_branch:
+        description: 'Theme branch to sync from (defaults to main)'
+        required: false
+        default: 'main'
+        type: string
+
+jobs:
+  sync-content:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Determine branch and commit
+        id: determine_branch
+        run: |
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            # Get from dispatch payload
+            BRANCH="${{ github.event.client_payload.branch }}"
+            THEME_REF="${{ github.event.client_payload.theme_ref }}"
+            THEME_BRANCH="${{ github.event.client_payload.theme_branch }}"
+          else
+            # Get from workflow inputs
+            BRANCH="${{ github.event.inputs.pr_number && format('theme-update/pr-{0}', github.event.inputs.pr_number) || 'main' }}"
+            THEME_REF="${{ github.event.inputs.theme_branch }}"
+            THEME_BRANCH="${{ github.event.inputs.theme_branch }}"
+          fi
+          
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          echo "theme_ref=$THEME_REF" >> $GITHUB_OUTPUT
+          echo "theme_branch=$THEME_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Checkout demo repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.determine_branch.outputs.branch }}
+          token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Checkout theme repository
+        uses: actions/checkout@v4
+        with:
+          repository: zetxek/adritian-free-hugo-theme
+          ref: ${{ steps.determine_branch.outputs.theme_ref }}
+          path: theme-checkout
+          token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Sync i18n files from theme
+        run: |
+          # Copy i18n files from theme to demo repo, excluding files that already exist
+          # to avoid overwriting customizations, but include new language files
+          
+          if [ -d "theme-checkout/i18n" ]; then
+            echo "Syncing i18n files from theme..."
+            mkdir -p i18n
+            
+            for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
+              if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                # Copy new language files or update existing ones
+                cp "$file" "i18n/$filename"
+                echo "Copied $filename"
+              fi
+            done
+          else
+            echo "No i18n directory found in theme"
+          fi
+
+      - name: Sync example content from theme
+        run: |
+          # Copy example content from theme's exampleSite to demo repo
+          # This includes homepage content in different languages
+          
+          if [ -d "theme-checkout/exampleSite/content" ]; then
+            echo "Syncing example content from theme..."
+            
+            # Sync home section content (translated versions)
+            if [ -d "theme-checkout/exampleSite/content/home" ]; then
+              mkdir -p content/home
+              
+              for file in theme-checkout/exampleSite/content/home/*; do
+                if [ -f "$file" ]; then
+                  filename=$(basename "$file")
+                  # Only copy language-specific files (e.g., home.ar.md, home.he.md)
+                  # Skip the base home.md to preserve demo customizations
+                  if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
+                    cp "$file" "content/home/$filename"
+                    echo "Copied $filename"
+                  fi
+                fi
+              done
+            fi
+            
+            # Sync other translated content if present
+            for section in blog education experience projects skills testimonial; do
+              if [ -d "theme-checkout/exampleSite/content/$section" ]; then
+                mkdir -p "content/$section"
+                # Copy language-specific files for each section
+                for file in theme-checkout/exampleSite/content/$section/*; do
+                  if [ -f "$file" ]; then
+                    filename=$(basename "$file")
+                    # Only copy language-specific files (e.g., *.ar.md, *.he.md)
+                    if [[ "$filename" == *.*.md ]]; then
+                      cp "$file" "content/$section/$filename"
+                      echo "Copied $filename to $section"
+                    fi
+                  fi
+                done
+              fi
+            done
+          else
+            echo "No exampleSite/content directory found in theme"
+          fi
+
+      - name: Sync configuration examples if needed
+        run: |
+          # Check if there are config examples in the theme that should be documented
+          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
+            echo "Theme has example configuration. Check for language settings..."
+            
+            # Extract language configuration from theme's example
+            if grep -q "\[languages\." theme-checkout/exampleSite/hugo.toml; then
+              echo "Found language configuration in theme example"
+              # Create a reference file for documentation purposes
+              mkdir -p .github/docs
+              grep -A 20 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
+              echo "Saved language configuration example to .github/docs/language-config-example.toml"
+            fi
+          fi
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git config --global user.name 'Git bot'
+          git config --global user.email 'bot@noreply.github.com'
+          
+          if [[ -n $(git status -s) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected:"
+            git status -s
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No content changes to sync"
+          fi
+
+      - name: Commit and push content changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git add i18n/ content/ .github/docs/ || true
+          
+          # Create detailed commit message
+          COMMIT_MSG="Sync content from theme
+
+Synced i18n files and example content from the theme repository.
+This includes:
+- Translation files for new languages
+- Example content for different languages
+- Configuration examples
+
+Theme ref: ${{ steps.determine_branch.outputs.theme_ref }}"
+          
+          git commit -m "$COMMIT_MSG"
+          git push origin "${{ steps.determine_branch.outputs.branch }}"
+          
+          echo "Content synced and pushed successfully"
+
+      - name: Add comment to PR if applicable
+        if: steps.check_changes.outputs.has_changes == 'true' && github.event.client_payload.pr_number
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.client_payload.pr_number }}"
+          
+          COMMENT="✅ **Content synced from theme**
+
+This PR has been updated with content and i18n files from the theme repository:
+- Translation files (i18n/*.yaml)
+- Example content for new languages
+- Configuration examples (in .github/docs/)
+
+These changes are in a separate commit to demonstrate the new features added in the theme."
+          
+          gh pr comment "$PR_NUMBER" --body "$COMMENT"

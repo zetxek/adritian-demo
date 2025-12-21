@@ -6,6 +6,8 @@ It serves also as a guide and documentation on how to edit the theme. Check the 
 
 The theme is added as a hugo module - and this site is updated automatically on every new push on the theme repo (via a [github action](https://github.com/zetxek/adritian-free-hugo-theme/actions/workflows/update-demo.yml).
 
+When PRs in the theme repository include content or configuration changes (such as new language support), this demo automatically syncs those changes to properly showcase the new features. See [Theme Content Synchronization](.github/docs/THEME_CONTENT_SYNC.md) for details.
+
 
 Other demo sites for the theme are:
 
