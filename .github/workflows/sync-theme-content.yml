@@ -16,9 +16,10 @@ on:
   # Can be manually triggered to sync content for an existing PR
   workflow_dispatch:
     inputs:
-      pr_number:
-        description: 'PR number to sync content for'
+      branch:
+        description: 'Branch name in adritian-demo to sync content to (defaults to main)'
         required: false
+        default: 'main'
         type: string
       theme_branch:
         description: 'Theme branch to sync from (defaults to main)'
@@ -41,7 +42,7 @@ jobs:
             THEME_BRANCH="${{ github.event.client_payload.theme_branch }}"
           else
             # Get from workflow inputs
-            BRANCH="${{ github.event.inputs.pr_number && format('theme-update/pr-{0}', github.event.inputs.pr_number) || 'main' }}"
+            BRANCH="${{ github.event.inputs.branch }}"
             THEME_REF="${{ github.event.inputs.theme_branch }}"
             THEME_BRANCH="${{ github.event.inputs.theme_branch }}"
           fi
