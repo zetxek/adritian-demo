@@ -53,14 +53,14 @@ If the theme includes new language configurations in `exampleSite/hugo.toml`, th
 
 1. Go to Actions → Sync Theme Content  
 2. Click "Run workflow"
-3. Enter the PR number and theme branch
+3. Enter the branch name and theme branch
 4. Click "Run workflow"
 
 ### Using GitHub CLI
 
 ```bash
 gh workflow run sync-theme-content.yml \
-  -f pr_number=341 \
+  -f branch=theme-update/pr-341 \
   -f theme_branch=copilot/add-rtl-support-to-theme
 ```
 
