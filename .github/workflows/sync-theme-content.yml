@@ -181,8 +181,12 @@ jobs:
       - name: Commit and push content changes
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
-          git add i18n/ content/ .github/docs/ || true
-          git clean -fd  # Remove untracked files like theme-checkout/
+          echo "Files to be added:"
+          git add -v i18n/ content/ .github/docs/ || true
+          
+          echo "Files to be removed:"
+          git clean -fdn  # Dry run to show what will be removed
+          git clean -fd   # Actually remove untracked files like theme-checkout/
 
           # Create detailed commit message
           git commit -m "Sync content from theme" \
