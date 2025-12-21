@@ -83,10 +83,11 @@ The automatic sync workflow (`auto-sync-content.yml`) works without any changes 
       {
         "branch": "theme-update/pr-${{ steps.pr.outputs.pr_number }}",
         "theme_ref": "${{ github.sha }}",
-        "theme_branch": "${{ github.head_ref }}",
-        "pr_number": "${{ steps.pr.outputs.pr_number }}"
+        "theme_branch": "${{ github.head_ref }}"
       }
 ```
+
+The `branch` field specifies which branch in the adritian-demo repository to sync content to.
 
 ## Benefits
 
