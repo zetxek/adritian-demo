@@ -17,7 +17,8 @@ on:
 jobs:
   check-and-sync:
     runs-on: ubuntu-latest
-    # Only run on preview PRs (those with theme-update/ prefix)
+    # Only run on preview PRs from theme updates (those with theme-update/ prefix)
+    # or PRs explicitly marked as preview in the title
     if: startsWith(github.head_ref, 'theme-update/') || contains(github.event.pull_request.title, 'preview:')
 
     steps:
@@ -43,6 +44,8 @@ jobs:
           echo "Theme version: $THEME_VERSION"
 
           # Try to extract commit SHA from pseudo-version
+          # Pseudo-version format: v0.0.0-yyyymmddhhmmss-abcdefabcdef
+          # where abcdefabcdef is the first 12 chars of the commit SHA
           if [[ $THEME_VERSION =~ -([0-9]+)\.[0-9]+-([0-9a-f]+)$ ]]; then
             COMMIT_SHA="${BASH_REMATCH[2]}"
             echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
@@ -69,28 +72,28 @@ jobs:
 
           # Check if theme has i18n files we don't have
           if [ -d "theme-checkout/i18n" ]; then
+            shopt -s nullglob  # Prevent literal glob strings
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
-              if [ -f "$file" ]; then
-                filename=$(basename "$file")
-                if [ ! -f "i18n/$filename" ]; then
-                  echo "New i18n file found: $filename"
-                  NEEDS_SYNC=true
-                fi
+              filename=$(basename "$file")
+              if [ ! -f "i18n/$filename" ]; then
+                echo "New i18n file found: $filename"
+                NEEDS_SYNC=true
               fi
             done
+            shopt -u nullglob
           fi
 
           # Check if theme has example content we don't have
           if [ -d "theme-checkout/exampleSite/content/home" ]; then
+            shopt -s nullglob  # Prevent literal glob strings
             for file in theme-checkout/exampleSite/content/home/*.*.md; do
-              if [ -f "$file" ]; then
-                filename=$(basename "$file")
-                if [ ! -f "content/home/$filename" ]; then
-                  echo "New content file found: $filename"
-                  NEEDS_SYNC=true
-                fi
+              filename=$(basename "$file")
+              if [ ! -f "content/home/$filename" ]; then
+                echo "New content file found: $filename"
+                NEEDS_SYNC=true
               fi
             done
+            shopt -u nullglob
           fi
 
           echo "needs_sync=$NEEDS_SYNC" >> $GITHUB_OUTPUT
@@ -102,13 +105,13 @@ jobs:
             echo "Syncing i18n files from theme..."
             mkdir -p i18n
 
+            shopt -s nullglob  # Prevent literal glob strings
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
-              if [ -f "$file" ]; then
-                filename=$(basename "$file")
-                cp "$file" "i18n/$filename"
-                echo "Copied $filename"
-              fi
+              filename=$(basename "$file")
+              cp "$file" "i18n/$filename"
+              echo "Copied $filename"
             done
+            shopt -u nullglob
           fi
 
       - name: Sync example content
@@ -121,29 +124,29 @@ jobs:
             if [ -d "theme-checkout/exampleSite/content/home" ]; then
               mkdir -p content/home
 
+              shopt -s nullglob  # Prevent literal glob strings
               for file in theme-checkout/exampleSite/content/home/*; do
-                if [ -f "$file" ]; then
-                  filename=$(basename "$file")
-                  # Only copy language-specific files
-                  if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
-                    cp "$file" "content/home/$filename"
-                    echo "Copied $filename"
-                  fi
+                filename=$(basename "$file")
+                # Only copy language-specific files
+                if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
+                  cp "$file" "content/home/$filename"
+                  echo "Copied $filename"
                 fi
               done
+              shopt -u nullglob
             fi
 
             # Sync other translated content
             for section in blog education experience projects skills testimonial; do
               if [ -d "theme-checkout/exampleSite/content/$section" ]; then
                 mkdir -p "content/$section"
+                shopt -s nullglob  # Prevent literal glob strings
                 for file in theme-checkout/exampleSite/content/$section/*.*.md; do
-                  if [ -f "$file" ]; then
-                    filename=$(basename "$file")
-                    cp "$file" "content/$section/$filename"
-                    echo "Copied $filename to $section"
-                  fi
+                  filename=$(basename "$file")
+                  cp "$file" "content/$section/$filename"
+                  echo "Copied $filename to $section"
                 done
+                shopt -u nullglob
               fi
             done
           fi
@@ -155,8 +158,11 @@ jobs:
             if grep -q "\[languages\." theme-checkout/exampleSite/hugo.toml; then
               echo "Found language configuration in theme example"
               mkdir -p .github/docs
-              grep -A 20 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
+              # Extract language configuration section (up to 50 lines max)
+              # This captures the [languages] section and related config
+              grep -A 50 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
               echo "Saved language configuration example"
+              echo "Note: If language config is longer than 50 lines, it may be truncated."
             fi
           fi
 

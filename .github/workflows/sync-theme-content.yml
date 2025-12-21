@@ -80,14 +80,14 @@ jobs:
             echo "Syncing i18n files from theme..."
             mkdir -p i18n
 
+            shopt -s nullglob  # Prevent literal glob strings
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
-              if [ -f "$file" ]; then
-                filename=$(basename "$file")
-                # Copy new language files or update existing ones
-                cp "$file" "i18n/$filename"
-                echo "Copied $filename"
-              fi
+              filename=$(basename "$file")
+              # Copy new language files or update existing ones
+              cp "$file" "i18n/$filename"
+              echo "Copied $filename"
             done
+            shopt -u nullglob
           else
             echo "No i18n directory found in theme"
           fi
@@ -104,17 +104,17 @@ jobs:
             if [ -d "theme-checkout/exampleSite/content/home" ]; then
               mkdir -p content/home
 
+              shopt -s nullglob  # Prevent literal glob strings
               for file in theme-checkout/exampleSite/content/home/*; do
-                if [ -f "$file" ]; then
-                  filename=$(basename "$file")
-                  # Only copy language-specific files (e.g., home.ar.md, home.he.md)
-                  # Skip the base home.md to preserve demo customizations
-                  if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
-                    cp "$file" "content/home/$filename"
-                    echo "Copied $filename"
-                  fi
+                filename=$(basename "$file")
+                # Only copy language-specific files (e.g., home.ar.md, home.he.md)
+                # Skip the base home.md to preserve demo customizations
+                if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
+                  cp "$file" "content/home/$filename"
+                  echo "Copied $filename"
                 fi
               done
+              shopt -u nullglob
             fi
 
             # Sync other translated content if present
@@ -122,16 +122,16 @@ jobs:
               if [ -d "theme-checkout/exampleSite/content/$section" ]; then
                 mkdir -p "content/$section"
                 # Copy language-specific files for each section
+                shopt -s nullglob  # Prevent literal glob strings
                 for file in theme-checkout/exampleSite/content/$section/*; do
-                  if [ -f "$file" ]; then
-                    filename=$(basename "$file")
-                    # Only copy language-specific files (e.g., *.ar.md, *.he.md)
-                    if [[ "$filename" == *.*.md ]]; then
-                      cp "$file" "content/$section/$filename"
-                      echo "Copied $filename to $section"
-                    fi
+                  filename=$(basename "$file")
+                  # Only copy language-specific files (e.g., *.ar.md, *.he.md)
+                  if [[ "$filename" == *.*.md ]]; then
+                    cp "$file" "content/$section/$filename"
+                    echo "Copied $filename to $section"
                   fi
                 done
+                shopt -u nullglob
               fi
             done
           else
@@ -149,8 +149,11 @@ jobs:
               echo "Found language configuration in theme example"
               # Create a reference file for documentation purposes
               mkdir -p .github/docs
-              grep -A 20 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
+              # Extract language configuration section (up to 50 lines max)
+              # This captures the [languages] section and related config
+              grep -A 50 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
               echo "Saved language configuration example to .github/docs/language-config-example.toml"
+              echo "Note: If language config is longer than 50 lines, it may be truncated."
             fi
           fi
 
