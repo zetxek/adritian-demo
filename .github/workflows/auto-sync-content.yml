@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only run on preview PRs (those with theme-update/ prefix)
     if: startsWith(github.head_ref, 'theme-update/') || contains(github.event.pull_request.title, 'preview:')
-    
+
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
           THEME_VERSION=$(grep "github.com/zetxek/adritian-free-hugo-theme" go.mod | awk '{print $2}')
           echo "version=$THEME_VERSION" >> $GITHUB_OUTPUT
           echo "Theme version: $THEME_VERSION"
-          
+
           # Try to extract commit SHA from pseudo-version
           if [[ $THEME_VERSION =~ -([0-9]+)\.[0-9]+-([0-9a-f]+)$ ]]; then
             COMMIT_SHA="${BASH_REMATCH[2]}"
@@ -66,7 +66,7 @@ jobs:
         id: check_sync
         run: |
           NEEDS_SYNC=false
-          
+
           # Check if theme has i18n files we don't have
           if [ -d "theme-checkout/i18n" ]; then
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
@@ -79,7 +79,7 @@ jobs:
               fi
             done
           fi
-          
+
           # Check if theme has example content we don't have
           if [ -d "theme-checkout/exampleSite/content/home" ]; then
             for file in theme-checkout/exampleSite/content/home/*.*.md; do
@@ -92,7 +92,7 @@ jobs:
               fi
             done
           fi
-          
+
           echo "needs_sync=$NEEDS_SYNC" >> $GITHUB_OUTPUT
 
       - name: Sync i18n files
@@ -101,7 +101,7 @@ jobs:
           if [ -d "theme-checkout/i18n" ]; then
             echo "Syncing i18n files from theme..."
             mkdir -p i18n
-            
+
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
               if [ -f "$file" ]; then
                 filename=$(basename "$file")
@@ -116,11 +116,11 @@ jobs:
         run: |
           if [ -d "theme-checkout/exampleSite/content" ]; then
             echo "Syncing example content from theme..."
-            
+
             # Sync home section content (translated versions)
             if [ -d "theme-checkout/exampleSite/content/home" ]; then
               mkdir -p content/home
-              
+
               for file in theme-checkout/exampleSite/content/home/*; do
                 if [ -f "$file" ]; then
                   filename=$(basename "$file")
@@ -132,7 +132,7 @@ jobs:
                 fi
               done
             fi
-            
+
             # Sync other translated content
             for section in blog education experience projects skills testimonial; do
               if [ -d "theme-checkout/exampleSite/content/$section" ]; then
@@ -165,24 +165,22 @@ jobs:
         run: |
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
-          
+
           if [[ -n $(git status -s) ]]; then
             git add i18n/ content/ .github/docs/ || true
-            
-            COMMIT_MSG="Sync content from theme (auto)
 
-Automatically synced i18n files and example content from theme version ${{ steps.theme_version.outputs.version }}.
+            git commit -m "Sync content from theme (auto)" \
+              -m "Automatically synced i18n files and example content from theme version ${{ steps.theme_version.outputs.version }}." \
+              -m "" \
+              -m "This includes:" \
+              -m "- Translation files for new languages" \
+              -m "- Example content for different languages" \
+              -m "- Configuration examples" \
+              -m "" \
+              -m "Synced from commit: ${{ steps.theme_version.outputs.commit_sha }}"
 
-This includes:
-- Translation files for new languages
-- Example content for different languages
-- Configuration examples
-
-Synced from commit: ${{ steps.theme_version.outputs.commit_sha }}"
-            
-            git commit -m "$COMMIT_MSG"
             git push origin "${{ github.head_ref }}"
-            
+
             echo "Content synced and pushed successfully"
           fi
 
@@ -191,13 +189,13 @@ Synced from commit: ${{ steps.theme_version.outputs.commit_sha }}"
         env:
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          COMMENT="✅ **Content automatically synced from theme**
+          gh pr comment ${{ github.event.pull_request.number }} --body - <<'EOF'
+          ✅ **Content automatically synced from theme**
 
-This PR has been updated with content and i18n files from the theme repository (version \`${{ steps.theme_version.outputs.version }}\`):
-- Translation files (i18n/*.yaml)
-- Example content for new languages
-- Configuration examples (in .github/docs/)
+          This PR has been updated with content and i18n files from the theme repository (version `${{ steps.theme_version.outputs.version }}`):
+          - Translation files (i18n/*.yaml)
+          - Example content for new languages
+          - Configuration examples (in .github/docs/)
 
-These changes are in a separate commit to demonstrate the new features added in the theme."
-          
-          gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
+          These changes are in a separate commit to demonstrate the new features added in the theme.
+          EOF

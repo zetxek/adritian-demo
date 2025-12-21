@@ -12,7 +12,7 @@ on:
   # Triggered by the theme repository via repository_dispatch
   repository_dispatch:
     types: [sync-theme-content]
-  
+
   # Can be manually triggered to sync content for an existing PR
   workflow_dispatch:
     inputs:
@@ -29,7 +29,7 @@ on:
 jobs:
   sync-content:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Determine branch and commit
         id: determine_branch
@@ -45,7 +45,7 @@ jobs:
             THEME_REF="${{ github.event.inputs.theme_branch }}"
             THEME_BRANCH="${{ github.event.inputs.theme_branch }}"
           fi
-          
+
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
           echo "theme_ref=$THEME_REF" >> $GITHUB_OUTPUT
           echo "theme_branch=$THEME_BRANCH" >> $GITHUB_OUTPUT
@@ -75,11 +75,11 @@ jobs:
         run: |
           # Copy i18n files from theme to demo repo, excluding files that already exist
           # to avoid overwriting customizations, but include new language files
-          
+
           if [ -d "theme-checkout/i18n" ]; then
             echo "Syncing i18n files from theme..."
             mkdir -p i18n
-            
+
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
               if [ -f "$file" ]; then
                 filename=$(basename "$file")
@@ -96,14 +96,14 @@ jobs:
         run: |
           # Copy example content from theme's exampleSite to demo repo
           # This includes homepage content in different languages
-          
+
           if [ -d "theme-checkout/exampleSite/content" ]; then
             echo "Syncing example content from theme..."
-            
+
             # Sync home section content (translated versions)
             if [ -d "theme-checkout/exampleSite/content/home" ]; then
               mkdir -p content/home
-              
+
               for file in theme-checkout/exampleSite/content/home/*; do
                 if [ -f "$file" ]; then
                   filename=$(basename "$file")
@@ -116,7 +116,7 @@ jobs:
                 fi
               done
             fi
-            
+
             # Sync other translated content if present
             for section in blog education experience projects skills testimonial; do
               if [ -d "theme-checkout/exampleSite/content/$section" ]; then
@@ -143,7 +143,7 @@ jobs:
           # Check if there are config examples in the theme that should be documented
           if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
             echo "Theme has example configuration. Check for language settings..."
-            
+
             # Extract language configuration from theme's example
             if grep -q "\[languages\." theme-checkout/exampleSite/hugo.toml; then
               echo "Found language configuration in theme example"
@@ -159,7 +159,7 @@ jobs:
         run: |
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
-          
+
           if [[ -n $(git status -s) ]]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "Changes detected:"
@@ -173,21 +173,19 @@ jobs:
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git add i18n/ content/ .github/docs/ || true
-          
+
           # Create detailed commit message
-          COMMIT_MSG="Sync content from theme
+          git commit -m "Sync content from theme" \
+            -m "Synced i18n files and example content from the theme repository." \
+            -m "This includes:" \
+            -m "- Translation files for new languages" \
+            -m "- Example content for different languages" \
+            -m "- Configuration examples" \
+            -m "" \
+            -m "Theme ref: ${{ steps.determine_branch.outputs.theme_ref }}"
 
-Synced i18n files and example content from the theme repository.
-This includes:
-- Translation files for new languages
-- Example content for different languages
-- Configuration examples
-
-Theme ref: ${{ steps.determine_branch.outputs.theme_ref }}"
-          
-          git commit -m "$COMMIT_MSG"
           git push origin "${{ steps.determine_branch.outputs.branch }}"
-          
+
           echo "Content synced and pushed successfully"
 
       - name: Add comment to PR if applicable
@@ -196,14 +194,14 @@ Theme ref: ${{ steps.determine_branch.outputs.theme_ref }}"
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER="${{ github.event.client_payload.pr_number }}"
-          
-          COMMENT="✅ **Content synced from theme**
 
-This PR has been updated with content and i18n files from the theme repository:
-- Translation files (i18n/*.yaml)
-- Example content for new languages
-- Configuration examples (in .github/docs/)
+          gh pr comment "$PR_NUMBER" --body - <<'EOF'
+          ✅ **Content synced from theme**
 
-These changes are in a separate commit to demonstrate the new features added in the theme."
-          
-          gh pr comment "$PR_NUMBER" --body "$COMMENT"
+          This PR has been updated with content and i18n files from the theme repository:
+          - Translation files (i18n/*.yaml)
+          - Example content for new languages
+          - Configuration examples (in .github/docs/)
+
+          These changes are in a separate commit to demonstrate the new features added in the theme.
+          EOF
