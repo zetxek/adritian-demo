@@ -6,13 +6,27 @@ This demo repository automatically syncs content, translations, and configuratio
 
 ## How It Works
 
-### Workflow Integration
+There are two complementary workflows for syncing content:
 
-When a PR is created in the theme repository (e.g., PR #385 adding RTL support), the theme's `update-demo-pr.yml` workflow:
+### 1. Automatic Sync (auto-sync-content.yml)
 
-1. **First Commit**: Updates the Hugo module version in `go.mod` and `go.sum`
+When a PR is created or updated in this repository with theme module changes:
+
+1. **Detects Module Update**: Workflow triggers when `go.mod` is updated in a preview PR
+2. **Extracts Theme Version**: Parses the theme commit SHA from the pseudo-version
+3. **Checks for New Content**: Compares theme's i18n and content files with demo repo
+4. **Syncs if Needed**: Automatically copies new files in a second commit
+5. **Adds Comment**: Notifies PR reviewers about the synced content
+
+This works **without requiring any changes to the theme repository**.
+
+### 2. Manual/Dispatch Sync (sync-theme-content.yml)
+
+For more control, the theme repository can explicitly trigger content sync:
+
+1. **First Commit**: Theme's workflow updates Hugo module version in `go.mod` and `go.sum`
 2. **Triggers Content Sync**: Dispatches a `repository_dispatch` event to this demo repository
-3. **Second Commit**: This repository's `sync-theme-content.yml` workflow copies:
+3. **Second Commit**: This repository's workflow copies:
    - i18n translation files (e.g., `ar.yaml`, `he.yaml`)
    - Example content from `exampleSite/content/` (language-specific files)
    - Configuration examples for documentation
@@ -35,7 +49,14 @@ If the theme includes new language configurations in `exampleSite/hugo.toml`, th
 
 ## Manual Sync
 
-You can manually trigger content sync for an existing PR:
+### Using GitHub Actions UI
+
+1. Go to Actions → Sync Theme Content  
+2. Click "Run workflow"
+3. Enter the PR number and theme branch
+4. Click "Run workflow"
+
+### Using GitHub CLI
 
 ```bash
 gh workflow run sync-theme-content.yml \
@@ -43,15 +64,13 @@ gh workflow run sync-theme-content.yml \
   -f theme_branch=copilot/add-rtl-support-to-theme
 ```
 
-Or via the GitHub Actions UI:
-1. Go to Actions → Sync Theme Content
-2. Click "Run workflow"
-3. Enter the PR number and theme branch
-4. Click "Run workflow"
+### Automatic Sync
 
-## Integration with Theme Repository
+The `auto-sync-content.yml` workflow runs automatically on preview PRs when `go.mod` is updated. No manual action is required.
 
-The theme repository should trigger this workflow by dispatching an event after creating/updating the preview PR:
+## Integration with Theme Repository (Optional)
+
+The automatic sync workflow (`auto-sync-content.yml`) works without any changes to the theme repository. However, for more explicit control, the theme repository can optionally trigger the manual sync workflow:
 
 ```yaml
 - name: Trigger content sync in demo repo
