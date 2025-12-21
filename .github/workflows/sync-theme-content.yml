@@ -41,10 +41,15 @@ jobs:
             THEME_REF="${{ github.event.client_payload.theme_ref }}"
             THEME_BRANCH="${{ github.event.client_payload.theme_branch }}"
           else
-            # Get from workflow inputs
+            # Get from workflow inputs (defaults to 'main' if not provided)
             BRANCH="${{ github.event.inputs.branch }}"
             THEME_REF="${{ github.event.inputs.theme_branch }}"
             THEME_BRANCH="${{ github.event.inputs.theme_branch }}"
+          fi
+
+          # Ensure branch has a value, fallback to main if empty
+          if [ -z "$BRANCH" ]; then
+            BRANCH="main"
           fi
 
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
