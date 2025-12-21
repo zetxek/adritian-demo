@@ -1,0 +1,361 @@
+[languages.en]
+disabled = false
+languageCode = 'en'
+languageDirection = 'ltr'
+languageName = 'English'
+title = ''
+weight = 0
+
+[languages.en.menus]
+[[languages.en.menus.header]]
+name = "Home"
+URL = "/"
+weight = 1
+[[languages.en.menus.header]]
+name = 'About'
+URL = '#about'
+weight = 2
+[[languages.en.menus.header]]
+name = 'Skills'
+URL = '/skills'
+weight = 3
+[[languages.en.menus.header]]
+name = 'Portfolio'
+URL = '#client-and-work-section'
+weight = 4
+#  [[languages.en.menus.header]]
+#  name = "Experience"
+#  URL = "#experience"
+#  weight = 4
+
+[[languages.en.menus.header]]
+name = "How to"
+URL = "/blog"
+weight = 5
+
+[[languages.en.menus.header]]
+pre = "email"
+name = "email"
+URL = "#contact"
+weight = 6
+
+[[languages.en.menus.header]]
+pre = "search"
+name = "Search"
+URL = "/search"
+weight = 7
+
+[[languages.en.menus.footer]]
+name = "Home"
+URL = "/"
+weight = 1
+
+[[languages.en.menus.footer]]
+name = "About"
+URL = "#about"
+weight = 2
+
+[[languages.en.menus.footer]]
+name = "Portfolio"
+URL = "#portfolio"
+weight = 3
+
+[[languages.en.menus.footer]]
+name = "Contact"
+URL = "#contact"
+weight = 4
+
+
+[languages.es]
+disabled = false
+languageCode = 'es'
+languageDirection = 'ltr'
+languageName = 'Español'
+title = ''
+weight = 0
+[[languages.es.menus.header]]
+name = "INICIO"
+URL = "/es/"
+weight = 1
+[[languages.es.menus.header]]
+name = 'Sobre mi'
+URL = '/es/#sobre-mi'
+weight = 2
+[[languages.es.menus.header]]
+name = 'Habilidades'
+URL = '/es/skills'
+weight = 3
+[[languages.es.menus.header]]
+name = 'Trabajo'
+URL = '/es/#trabajo'
+weight = 4
+
+#  [[languages.es.menus.header]]
+#  name = "Experiencia"
+#  URL = "/es/#experience"
+#  weight = 4
+
+[[languages.es.menus.header]]
+name = "Blog"
+URL = "/es/blog"
+weight = 5
+
+
+[[languages.es.menus.header]]
+pre = "email"
+name = "Contacto"
+URL = "/es/#contacto"
+weight = 6
+
+[[languages.es.menus.header]]
+pre = "search"
+name = "Buscar"
+URL = "/search"
+weight = 7
+
+[[languages.es.menus.footer]]
+name = "INICIO"
+URL = "/"
+weight = 1
+
+[[languages.es.menus.footer]]
+name = "Sobre mi"
+URL = "/es/#about"
+weight = 2
+
+[[languages.es.menus.footer]]
+name = "Portfolio"
+URL = "/es/#client-and-work-section"
+weight = 3
+
+[[languages.es.menus.footer]]
+name = "Contact"
+URL = "/es/#contact"
+weight = 4
+
+[languages.fr]
+disabled = false
+languageCode = 'fr'
+languageDirection = 'ltr'
+languageName = 'Français'
+title = ''
+weight = 0
+
+[languages.fr.menus]
+[[languages.fr.menus.header]]
+name = "ACCUEIL"
+URL = "/fr/"
+weight = 1
+[[languages.fr.menus.header]]
+name = 'About'
+URL = '#about'
+weight = 2
+[[languages.fr.menus.header]]
+name = 'Compétences'
+URL = '/fr/skills'
+weight = 3
+[[languages.fr.menus.header]]
+name = 'Portfolio'
+URL = '#client-and-work-section'
+weight = 4
+#  [[languages.fr.menus.header]]
+#  name = "Experience"
+#  URL = "#experience"
+#  weight = 4
+
+[[languages.fr.menus.header]]
+name = "Blog"
+URL = "/blog"
+weight = 5
+
+[[languages.fr.menus.header]]
+pre = "email"
+name = "Contact"
+URL = "#contact"
+weight = 6
+
+[[languages.fr.menus.header]]
+pre = "search"
+name = "Recherche"
+URL = "/search"
+weight = 7
+[[languages.fr.menus.footer]]
+name = "ACCUEIL"
+URL = "/fr/"
+weight = 1
+
+[[languages.fr.menus.footer]]
+name = "About"
+URL = "#about"
+weight = 2
+
+[[languages.fr.menus.footer]]
+name = "Portfolio"
+URL = "#client-and-work-section"
+weight = 3
+
+[[languages.fr.menus.footer]]
+name = "Contact"
+URL = "#contact"
+weight = 4
+
+[languages.ar]
+disabled = false
+languageCode = 'ar'
+languageDirection = 'rtl'
+languageName = 'العربية'
+title = ''
+weight = 0
+
+[languages.ar.menus]
+[[languages.ar.menus.header]]
+name = "الرئيسية"
+URL = "/ar/"
+weight = 1
+[[languages.ar.menus.header]]
+name = 'عني'
+URL = '/ar/#عني'
+weight = 2
+[[languages.ar.menus.header]]
+name = 'المهارات'
+URL = '/ar/skills'
+weight = 3
+[[languages.ar.menus.header]]
+name = 'أعمالي'
+URL = '/ar/#اعمالي'
+weight = 4
+[[languages.ar.menus.header]]
+name = "المدونة"
+URL = "/ar/blog"
+weight = 5
+[[languages.ar.menus.header]]
+pre = "email"
+name = "تواصل"
+URL = "/ar/#تواصل"
+weight = 6
+[[languages.ar.menus.header]]
+pre = "search"
+name = "بحث"
+URL = "/search"
+weight = 7
+
+[[languages.ar.menus.footer]]
+name = "الرئيسية"
+URL = "/ar/"
+weight = 1
+[[languages.ar.menus.footer]]
+name = "عني"
+URL = "/ar/#عني"
+weight = 2
+[[languages.ar.menus.footer]]
+name = "أعمالي"
+URL = "/ar/#اعمالي"
+weight = 3
+[[languages.ar.menus.footer]]
+name = "تواصل"
+URL = "/ar/#تواصل"
+weight = 4
+
+[languages.he]
+disabled = false
+languageCode = 'he'
+languageDirection = 'rtl'
+languageName = 'עברית'
+title = ''
+weight = 0
+
+[languages.he.menus]
+[[languages.he.menus.header]]
+name = "בית"
+URL = "/he/"
+weight = 1
+[[languages.he.menus.header]]
+name = 'אודות'
+URL = '/he/#אודות'
+weight = 2
+[[languages.he.menus.header]]
+name = 'מיומנויות'
+URL = '/he/skills'
+weight = 3
+[[languages.he.menus.header]]
+name = 'עבודות'
+URL = '/he/#עבודות'
+weight = 4
+[[languages.he.menus.header]]
+name = "בלוג"
+URL = "/he/blog"
+weight = 5
+[[languages.he.menus.header]]
+pre = "email"
+name = "צור קשר"
+URL = "/he/#צור-קשר"
+weight = 6
+[[languages.he.menus.header]]
+pre = "search"
+name = "חיפוש"
+URL = "/search"
+weight = 7
+
+[[languages.he.menus.footer]]
+name = "בית"
+URL = "/he/"
+weight = 1
+[[languages.he.menus.footer]]
+name = "אודות"
+URL = "/he/#אודות"
+weight = 2
+[[languages.he.menus.footer]]
+name = "עבודות"
+URL = "/he/#עבודות"
+weight = 3
+[[languages.he.menus.footer]]
+name = "צור קשר"
+URL = "/he/#צור-קשר"
+weight = 4
+
+
+# Plugins
+[params.plugins]
+
+# CSS Plugins
+[[params.plugins.css]]
+URL = "css/custom.css"
+[[params.plugins.css]]
+URL = "css/adritian-icons.css"
+## Print css
+[[params.plugins.css]]
+URL = "css/bootstrap-print.css"
+
+# JS Plugins
+[[params.plugins.js]]
+URL = "js/rad-animations.js"
+[[params.plugins.js]]
+URL = "js/sticky-header.js"
+[[params.plugins.js]]
+URL = "js/library/fontfaceobserver.js"
+
+# SCSS Plugins
+[[params.plugins.scss]]
+URL = "scss/adritian.scss"
+
+
+# theme/color style 
+[params.colorTheme]
+
+## the following configuration would disable automatic theme selection
+#  [params.colorTheme.auto]
+#    disable = true
+#  [params.colorTheme.forced]
+#    theme = "dark"
+
+## the following parameter will disable theme override in the footer
+#  [params.colorTheme.selector.disable]
+#  footer = true
+
+
+[params.colorTheme.selector.disable]
+footer = false
+header = false
+mobileHeader = false
+## by default we allow override AND automatic selection
+

@@ -52,6 +52,154 @@
 - id: "head_description"
   translation: "This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications."
 
+## Homepage showcase
+- id: "showcase_title"
+  translation: "Welcome to the demo"
+
+- id: "showcase_subtitle"
+  translation: "Let's dive into an example"
+
+- id: "showcase_description"
+  translation: "This is a high performance theme for the Hugo static site generator. 
+    This sample content can be edited in the locale files (as the theme supports translations).
+    <br>
+    You can download this theme from <a target='_blank' href='https://github.com/zetxek/adritian-free-hugo-theme'>github</a>, 
+    and see it live <a target='_blank' href='https://adritian-demo.vercel.app/'>as a demo site</a> 
+    or <a target='_blank' href='https://www.adrianmoreno.info'>a real one</a>.
+    <br>
+    The content you see so far in the homepage is:
+    <ul>
+      <li>Site logo/name: site config file (<code>hugo.toml</code>)</li>
+      <li>Site top menu: site config file (<code>hugo.toml</code>), look for the <code>[[languages.en.menus.header]]</code> section</li>
+      <li>This paragraph: <code>i18n/en.yaml</code> (for English)</li>
+    </ul>
+    Additionally, the order of the items in the homepage is configured in the <code>sections</code> array in the <code>hugo.toml</code> file:
+    <code>sections = [
+  \"showcase\",
+  \"about\",
+  \"education\",
+  \"experience\",
+  \"client-and-work\",
+  \"testimonial\",
+  \"contact\",
+  \"newsletter\",
+  ]</code><br/> 
+  The content of each section is defined in the <code>data/homepage.yml</code> file (ie: links to social sites, mail, ...).
+  <br/>
+  If you scroll this page you will see some hints on where the content comes from - all the way to the footer menu. These links come from the site config file (<code>hugo.toml</code>), look for the <code>[[languages.en.menus.footer]]</code> section."
+
+- id: "showcase_button"
+  translation: "Contact"
+
+  ## not visible but used for accessibility
+- id: "showcase_image_alt"
+  translation: "A picture of Cool Name"
+
+## Homepage about
+- id: "about_title"
+  translation: "Who am I?"
+
+- id: "about_content"
+  translation:  '<p class="lead">
+      Here you can add some information about you. A small excerpt that describes 
+      your experience, for example.   
+      <br/>
+      You explain something about your academic/study background, as well as your
+      preferred areas of work.
+      </p>
+      <p>The content for this section is defined in the <code>i18n/en.yaml</code> file, 
+      in the <code>about_content</code> item.
+      </p>'
+
+- id: "about_button"
+  translation: "About Me"
+
+## Homepage education
+- id: "education_title"
+  translation: "Education"
+
+## Homepage experience
+- id: "experience_button"
+  translation: "LinkedIn" 
+
+- id: "experience_button_url"
+  translation: "https://www.linkedin.com/in/adrianmoreno/"
+
+- id: "experience_button2"
+  translation: "Download resume"
+
+- id: "experience_button2_url"
+  translation: "/img/general/user-smile-fill.svg"
+
+- id: "experience_button3"
+  translation: "View all"
+
+- id: "experience_button3_url"
+  translation: "/experience"
+
+## Homepage client & work
+- id: "client_work_title"
+  translation: "Clients & Work"
+
+## Homepage newsletter
+- id: "newsletter_title"
+  translation: "Newsletter"
+
+- id: "newsletter_button"
+  translation: "Subscribe"
+
+- id: "newsletter_placeholder"
+  translation: "Your email"
+
+- id: "newsletter_success_message"
+  translation: "Thank you for subscribing to my newsletter!"
+
+- id: "newsletter_error_message"
+  translation: "An error occurred. Please try again."
+
+- id: "newsletter_note"
+  translation: "We'll never share your email with anyone else."
+
+## Homepage testimonials
+- id: "testimonials_title"
+  translation: "Testimonials"
+
+## Homepage contact
+- id: "contact_title"
+  translation: "Contact"
+
+- id: "contact_button"
+  translation: "Send message"
+
+- id: "contact_form_name"
+  translation: "Full Name"
+
+- id: "contact_form_email"
+  translation: "Email Address"
+
+- id: "contact_form_message"
+  translation: "Type Your Message Here"
+
+- id: "contact_phone_title"
+  translation: "Phone Number"
+
+- id: "contact_phone_number"
+  translation: "Defined in i18n/en.yaml (contact_phone_number)"
+
+- id: "contact_email_title"
+  translation: "Email"
+
+- id: "contact_email_email"
+  translation: 'Defined in i18n/en.yaml (contact_email_email)'
+
+- id: "contact_address_title"
+  translation: "Address"
+
+- id: "contact_address_address"
+  translation: "Defined in i18n/en.yaml (contact_address_address)"
+
+- id: "contact_button"
+  translation: "Send Message"
 
 ## Blog
 - id: "read_more"
@@ -70,4 +218,48 @@
   translation: "Sorry, but the page you were looking for could not be found."
 - id: "404_button"
   translation: "Back to homepage"
+
+## Related Posts
+- id: "related_posts"
+  translation: "Related Posts"
+
+## Social Sharing
+- id: "share_this_post"
+  translation: "Share this post"
+- id: "share_on_twitter"
+  translation: "Share on Twitter"
+- id: "share_on_linkedin"
+  translation: "Share on LinkedIn"
+- id: "share_on_facebook"
+  translation: "Share on Facebook"
+- id: "share_via_email"
+  translation: "Share via Email"
+- id: "share_twitter_label"
+  translation: "Twitter"
+- id: "share_linkedin_label"
+  translation: "LinkedIn"
+- id: "share_facebook_label"
+  translation: "Facebook"
+- id: "share_email_label"
+  translation: "Email"
+
+## Table of Contents
+- id: "table_of_contents"
+  translation: "Table of Contents"
+
+## Comments
+- id: "comments"
+  translation: "Comments"
+
+## Reading time and metadata
+- id: "min_read"
+  translation: "min read"
+- id: "last_updated"
+  translation: "Updated"
+
+## Taxonomy
+- id: "categories"
+  translation: "Categories"
+- id: "recent_posts"
+  translation: "Recent Posts"
 
