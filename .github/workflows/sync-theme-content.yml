@@ -169,6 +169,9 @@ jobs:
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
 
+          # Clean untracked files and directories (like theme-checkout/)
+          git clean -fd
+
           if [[ -n $(git status -s) ]]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "Changes detected:"
@@ -181,12 +184,7 @@ jobs:
       - name: Commit and push content changes
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
-          echo "Files to be added:"
-          git add -v i18n/ content/ .github/docs/ || true
-          
-          echo "Files to be removed:"
-          git clean -fdn  # Dry run to show what will be removed
-          git clean -fd   # Actually remove untracked files like theme-checkout/
+          git add i18n/ content/ .github/docs/ || true
 
           # Create detailed commit message
           git commit -m "Sync content from theme" \
