@@ -48,6 +48,8 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Install Node.js dependencies
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+      - name: Update footer version
+        run: npm run update-version
       - name: Install postcss
         run: npm i -D postcss postcss-cli autoprefixer        
       - name: Build with Hugo

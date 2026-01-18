@@ -10,6 +10,9 @@
       "postcss-cli": "github.com/zetxek/adritian-free-hugo-theme"
     }
   },
+  "scripts": {
+    "update-version": "node scripts/update-footer.js"
+  },
   "dependencies": {},
   "devDependencies": {
     "@zetxek/adritian-theme-helper": "^1.0.5",
