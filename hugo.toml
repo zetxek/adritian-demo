@@ -2,6 +2,10 @@ baseURL = "https://adritian-demo.vercel.app/"
 title = "Adritian Demo"
 languageCode = "en"
 
+[pagination]
+pagerSize = 3
+
+
 # Exclude footer section from generating list pages (index.html and index.xml)
 [outputs]
   page = ["HTML"]
@@ -11,12 +15,19 @@ languageCode = "en"
   term = ["HTML", "RSS"]
   footer = []
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  author = "authors"
+  series = "series"
+  topic = "topics"
+
 # Explicitly prevent the footer section from generating any output
 [outputFormats.footerSection]
   # Empty configuration to prevent any output
 
 # Specifically disable generation of these kinds for the footer content
-disableKinds = ["footerSection", "RSS"]
+disableKinds = ["footerSection"]
 
 [module]
 [[module.imports]]
@@ -66,6 +77,20 @@ target = "assets/css/bootstrap-print.css"
 title = 'Adritian - a high performance hugo theme by Adrián Moreno'
 description = 'This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications.'
 images = ['/img/og-img.png']
+themeColor = '#478079'
+
+[params.seo]
+siteName = 'Adritian'
+siteDescription = 'This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications.'
+siteImage = '/img/og-img.png'
+
+[params.social]
+twitter = 'zetxek'
+
+[params.seo.person]
+name = 'Adrián Moreno Peña'
+url = 'https://www.adrianmoreno.info'
+sameAs = ['https://github.com/zetxek']
 sections = [
   "showcase",
   "about",
@@ -80,6 +105,19 @@ sections = [
 # logo = '/img/hugo.svg'
 
 homepageExperienceCount = 6
+
+[params.favicons]
+# Optional: provide a different source image for auto-generation
+source = "icons/favicon.png"
+
+# Optional: override any generated file with a static one
+# favicon = "/favicon.ico"
+# icon16 = "/icons/icon-16.png"
+# icon32 = "/icons/icon-32.png"
+# appleTouch = "/icons/apple-touch-icon.png"
+# icon192 = "/icons/icon-192.png"
+# icon512 = "/icons/icon-512.png"
+# manifest = "/site.webmanifest"
 
 [params.analytics]
 ## Analytics parameters.
@@ -139,7 +177,7 @@ URL = '/skills'
 weight = 3
 [[languages.en.menus.header]]
 name = 'Portfolio'
-URL = '#portfolio'
+URL = '#client-and-work-section'
 weight = 4
 #  [[languages.en.menus.header]]
 #  name = "Experience"
@@ -218,6 +256,7 @@ name = "Blog"
 URL = "/es/blog"
 weight = 5
 
+
 [[languages.es.menus.header]]
 pre = "email"
 name = "Contacto"
@@ -242,7 +281,7 @@ weight = 2
 
 [[languages.es.menus.footer]]
 name = "Portfolio"
-URL = "/es/#portfolio"
+URL = "/es/#client-and-work-section"
 weight = 3
 
 [[languages.es.menus.footer]]
@@ -273,7 +312,7 @@ URL = '/fr/skills'
 weight = 3
 [[languages.fr.menus.header]]
 name = 'Portfolio'
-URL = '#portfolio'
+URL = '#client-and-work-section'
 weight = 4
 #  [[languages.fr.menus.header]]
 #  name = "Experience"
@@ -308,7 +347,7 @@ weight = 2
 
 [[languages.fr.menus.footer]]
 name = "Portfolio"
-URL = "#portfolio"
+URL = "#client-and-work-section"
 weight = 3
 
 [[languages.fr.menus.footer]]
@@ -476,17 +515,23 @@ header = false
 mobileHeader = false
 ## by default we allow override AND automatic selection
 
-# Page transition settings
-[params.pageTransition]
-enabled = true  # Set to false to disable the page fade transition effect
+# View Transitions API - enabled by default
+# Set to false to disable the native View Transitions API
+# viewTransitions = false
+
+[params.sharing]
+bluesky = true
+mastodon = true
 
 [params.blog]
 layout = "sidebar-right"     # options: default (no sidebar), sidebar, sidebar-right
 sidebarWidth = "25"    # percentage width of the sidebar
+narrowContent = true   # if true, limits content width to 720px for better readability
 showCategories = true
 showRecentPosts = true
 recentPostCount = 5
 listStyle = "summary"  # options: simple, summary
+listLayout = "default" # options: default, cards
 featured_sort_by_weight = true
 featured_sort_by_date = false
 
@@ -502,6 +547,7 @@ showJobCard = true # Set to false to hide the job card
       unsafe = true
   [markup.highlight]
     lineNos = false
+    noClasses = false
     style = "github"
 
 [imaging]
