@@ -1,5 +1,5 @@
 {
-    "buildCommand": "echo VERCEL_URL=$VERCEL_URL ; hugo --minify --baseURL=\"https://$VERCEL_URL/\"",
+    "buildCommand": "hugo --minify --baseURL=\"https://adritian-demo.vercel.app/\"",
     "installCommand": "dnf -y install golang ; hugo mod npm pack; npm i -D postcss postcss-cli autoprefixer; npm i",
     "cleanUrls": true,
     "headers": [

@@ -191,6 +191,7 @@ languageDirection = 'ltr'
 languageName = 'Español'
 title = ''
 weight = 0
+description = 'Este tema Hugo (Adritian) está basado en Bootstrap y tiene características que lo hacen adecuado para un sitio personal, un portafolio u otros tipos de aplicaciones de página única.'
 [[languages.es.menus.header]]
 name = "INICIO"
 URL = "/es/"
@@ -257,6 +258,7 @@ languageDirection = 'ltr'
 languageName = 'Français'
 title = ''
 weight = 0
+description = "Ce thème Hugo (Adritian) est basé sur Bootstrap et dispose de fonctionnalités le rendant adapté à un site personnel, un portfolio ou d'autres types d'applications monopages."
 
 [languages.fr.menus]
 [[languages.fr.menus.header]]
@@ -323,6 +325,7 @@ languageDirection = 'rtl'
 languageName = 'العربية'
 title = ''
 weight = 0
+description = 'قالب Hugo هذا (Adritian) مبني على Bootstrap ويتميز بخصائص تجعله مناسباً للمواقع الشخصية ومواقع المحافظ الإلكترونية وتطبيقات الصفحة الواحدة.'
 
 [languages.ar.menus]
 [[languages.ar.menus.header]]
@@ -380,6 +383,7 @@ languageDirection = 'rtl'
 languageName = 'עברית'
 title = ''
 weight = 0
+description = 'ערכת נושא Hugo זו (Adritian) מבוססת על Bootstrap ומכילה תכונות המתאימות לאתרים אישיים, תיקי עבודות ויישומי עמוד בודד.'
 
 [languages.he.menus]
 [[languages.he.menus.header]]
