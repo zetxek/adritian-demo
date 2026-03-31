@@ -147,21 +147,26 @@ weight = 4
 #  weight = 4
 
 [[languages.en.menus.header]]
+name = "Showcase"
+URL = "/showcase"
+weight = 5
+
+[[languages.en.menus.header]]
 name = "How to"
 URL = "/blog"
-weight = 5
+weight = 6
 
 [[languages.en.menus.header]]
 pre = "email"
 name = "email"
 URL = "#contact"
-weight = 6
+weight = 7
 
 [[languages.en.menus.header]]
 pre = "search"
 name = "Search"
 URL = "/search"
-weight = 7
+weight = 8
 
 [[languages.en.menus.footer]]
 name = "Home"
