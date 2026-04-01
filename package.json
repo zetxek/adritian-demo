@@ -20,5 +20,8 @@
     "postcss-cli": "^11.0.0"
   },
   "name": "adritian-demo",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "workspaces": [
+    "packages/hugoautogen"
+  ]
 }
