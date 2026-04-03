@@ -14,6 +14,8 @@ images:
 
 This article is a guide to help you create your own version of the site using [Adritian](https://github.com/zetxek/adritian-free-hugo-theme). It will cover the main steps to get started with the theme, and how to customize it to your needs.
 
+{{< responsive-image src="images/experience/internet-affairs.png" alt="Adritian theme demo" sizes="(max-width: 768px) 100vw, 600px" >}}
+
 ### Creating a site
 
 This theme is for the content management system [Hugo](https://gohugo.io/), so that will be a pre-requirement.
@@ -361,14 +363,14 @@ Currently the theme content is spread over multiple folders and files. We are wo
 Some of the key files are:
 
 
-- `config.toml`: Main configuration for your Hugo site. Here you can set the site title, description, and theme specific settings such as:
+- `hugo.toml`: Main configuration for your Hugo site. Here you can set the site title, description, and theme specific settings such as:
     - menu structure (footer and header)
     - analytics (vercel, google)
     - blog settings (layout, sidebar contents, etc)
     - As well as some **required settings** for the theme to work properly (`module.mounts`, `params.plugins.css`)
 
 - `data/homepage.yml`: homepage structure, content and sections - including social links, and the hero section.
-- `assets/`: Where you can store static assets such as images, CSS, and JavaScript files (you can add custom CSS and JS files with the `params.plugins.css` in `config.toml`).
+- `assets/`: Where you can store static assets such as images, CSS, and JavaScript files (you can add custom CSS and JS files with the `params.plugins.css` in `hugo.toml`).
 - `content/`: This is where your content files will live. The theme-specific ones are:
     - `content/blog/`: For blog posts.
     - `content/portfolio/`: For portfolio items.
@@ -383,7 +385,7 @@ Some of the key files are:
 Hugo allows you to customize the theme in many ways. You can override the theme's layouts, styles, and content.
 For that, you just need to locate the file you would like to change, copy it to your site's corresponding folder (`layouts`, `assets`, ...), and edit it.
 
-**Note**: if you do this you will not benefit from theme updates, and that could lead to bugs. You can keep an eye on the [UPGRADING.md](https://github.com/zetxek/adritian-free-hugo-theme/blob/main/UPGRADING.md) file.
+**Note**: if you do this you will not benefit from theme updates, and that could lead to bugs. You can keep an eye on the [CHANGELOG.md](https://github.com/zetxek/adritian-free-hugo-theme/blob/main/CHANGELOG.md) file.
 
 ### Improving the theme
 

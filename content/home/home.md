@@ -47,7 +47,8 @@ draft = false
     button_url="/skills"
     imgSrc="images/about/user-picture.png"
     imgScale="0.5"
-    text_align="center"
+    v_align="center"
+    h_align="left"
  >}}
 
 {{< education-list
