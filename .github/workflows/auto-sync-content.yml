@@ -70,9 +70,17 @@ jobs:
         run: |
           NEEDS_SYNC=false
 
+          # Check if theme hugo.toml differs from demo
+          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
+            if ! diff -q hugo.toml theme-checkout/exampleSite/hugo.toml > /dev/null 2>&1; then
+              echo "hugo.toml differs from theme"
+              NEEDS_SYNC=true
+            fi
+          fi
+
           # Check if theme has i18n files we don't have
           if [ -d "theme-checkout/i18n" ]; then
-            shopt -s nullglob  # Prevent literal glob strings
+            shopt -s nullglob
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
               filename=$(basename "$file")
               if [ ! -f "i18n/$filename" ]; then
@@ -83,13 +91,26 @@ jobs:
             shopt -u nullglob
           fi
 
-          # Check if theme has example content we don't have
-          if [ -d "theme-checkout/exampleSite/content/home" ]; then
-            shopt -s nullglob  # Prevent literal glob strings
-            for file in theme-checkout/exampleSite/content/home/*.*.md; do
+          # Check if theme has content files we don't have (any section)
+          if [ -d "theme-checkout/exampleSite/content" ]; then
+            shopt -s nullglob
+            for dir in theme-checkout/exampleSite/content/*/; do
+              section=$(basename "$dir")
+              for file in "$dir"*; do
+                [ -f "$file" ] || continue
+                filename=$(basename "$file")
+                if [ ! -f "content/$section/$filename" ]; then
+                  echo "New content file found: $section/$filename"
+                  NEEDS_SYNC=true
+                fi
+              done
+            done
+            # Check root-level content files
+            for file in theme-checkout/exampleSite/content/*.md; do
+              [ -f "$file" ] || continue
               filename=$(basename "$file")
-              if [ ! -f "content/home/$filename" ]; then
-                echo "New content file found: $filename"
+              if [ ! -f "content/$filename" ]; then
+                echo "New root content file found: $filename"
                 NEEDS_SYNC=true
               fi
             done
@@ -98,6 +119,20 @@ jobs:
 
           echo "needs_sync=$NEEDS_SYNC" >> $GITHUB_OUTPUT
 
+      - name: Sync hugo.toml
+        if: steps.check_sync.outputs.needs_sync == 'true'
+        run: |
+          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
+            echo "Syncing hugo.toml from theme's exampleSite..."
+            cp theme-checkout/exampleSite/hugo.toml hugo.toml
+
+            # Apply demo-specific overrides if the override script exists
+            if [ -f ".github/sync-config-overrides.sh" ]; then
+              echo "Applying demo-specific config overrides..."
+              bash .github/sync-config-overrides.sh hugo.toml
+            fi
+          fi
+
       - name: Sync i18n files
         if: steps.check_sync.outputs.needs_sync == 'true'
         run: |
@@ -105,7 +140,7 @@ jobs:
             echo "Syncing i18n files from theme..."
             mkdir -p i18n
 
-            shopt -s nullglob  # Prevent literal glob strings
+            shopt -s nullglob
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
               filename=$(basename "$file")
               cp "$file" "i18n/$filename"
@@ -114,78 +149,76 @@ jobs:
             shopt -u nullglob
           fi
 
-      - name: Sync example content
+      - name: Sync content from theme exampleSite
         if: steps.check_sync.outputs.needs_sync == 'true'
         run: |
-          if [ -d "theme-checkout/exampleSite/content" ]; then
-            echo "Syncing example content from theme..."
-
-            # Sync home section content (translated versions)
-            if [ -d "theme-checkout/exampleSite/content/home" ]; then
-              mkdir -p content/home
-
-              shopt -s nullglob  # Prevent literal glob strings
-              for file in theme-checkout/exampleSite/content/home/*; do
-                filename=$(basename "$file")
-                # Only copy language-specific files
-                if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
-                  cp "$file" "content/home/$filename"
-                  echo "Copied $filename"
-                fi
-              done
-              shopt -u nullglob
-            fi
-
-            # Sync other translated content
-            for section in blog education experience projects skills testimonial; do
-              if [ -d "theme-checkout/exampleSite/content/$section" ]; then
-                mkdir -p "content/$section"
-                shopt -s nullglob  # Prevent literal glob strings
-                for file in theme-checkout/exampleSite/content/$section/*.*.md; do
-                  filename=$(basename "$file")
-                  cp "$file" "content/$section/$filename"
-                  echo "Copied $filename to $section"
-                done
-                shopt -u nullglob
-              fi
-            done
+          if [ ! -d "theme-checkout/exampleSite/content" ]; then
+            exit 0
           fi
 
-      - name: Sync configuration examples
+          echo "Syncing content from theme's exampleSite..."
+
+          # Sync all content directories
+          shopt -s nullglob
+          for dir in theme-checkout/exampleSite/content/*/; do
+            section=$(basename "$dir")
+            mkdir -p "content/$section"
+
+            for file in "$dir"*; do
+              [ -f "$file" ] || continue
+              filename=$(basename "$file")
+              cp "$file" "content/$section/$filename"
+              echo "Copied $section/$filename"
+            done
+          done
+          shopt -u nullglob
+
+          # Sync root-level content files
+          for file in theme-checkout/exampleSite/content/*.md; do
+            [ -f "$file" ] || continue
+            filename=$(basename "$file")
+            cp "$file" "content/$filename"
+            echo "Copied root content: $filename"
+          done
+
+      - name: Sync static and data files
         if: steps.check_sync.outputs.needs_sync == 'true'
         run: |
-          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
-            if grep -q "\[languages\." theme-checkout/exampleSite/hugo.toml; then
-              echo "Found language configuration in theme example"
-              mkdir -p .github/docs
-              # Extract language configuration section (up to 50 lines max)
-              # This captures the [languages] section and related config
-              grep -A 50 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
-              echo "Saved language configuration example"
-              echo "Note: If language config is longer than 50 lines, it may be truncated."
-            fi
+          if [ -d "theme-checkout/exampleSite/static" ]; then
+            echo "Syncing static assets..."
+            cp -r theme-checkout/exampleSite/static/* static/ 2>/dev/null || true
+          fi
+          if [ -d "theme-checkout/exampleSite/data" ]; then
+            echo "Syncing data files..."
+            mkdir -p data
+            cp -r theme-checkout/exampleSite/data/* data/ 2>/dev/null || true
           fi
 
       - name: Commit content changes
         if: steps.check_sync.outputs.needs_sync == 'true'
+        env:
+          THEME_VERSION: ${{ steps.theme_version.outputs.version }}
+          THEME_COMMIT: ${{ steps.theme_version.outputs.commit_sha }}
+          PR_BRANCH: ${{ github.head_ref }}
         run: |
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
 
           if [[ -n $(git status -s) ]]; then
-            git add i18n/ content/ .github/docs/ || true
+            git add hugo.toml i18n/ content/ static/ data/ .github/ || true
 
             git commit -m "Sync content from theme (auto)" \
-              -m "Automatically synced i18n files and example content from theme version ${{ steps.theme_version.outputs.version }}." \
+              -m "Automatically synced configuration and content from theme version $THEME_VERSION." \
               -m "" \
               -m "This includes:" \
-              -m "- Translation files for new languages" \
-              -m "- Example content for different languages" \
-              -m "- Configuration examples" \
+              -m "- hugo.toml configuration (menus, params, etc.)" \
+              -m "- Translation files (i18n)" \
+              -m "- All content sections" \
+              -m "- Static assets and data files" \
               -m "" \
-              -m "Synced from commit: ${{ steps.theme_version.outputs.commit_sha }}"
+              -m "Synced from commit: $THEME_COMMIT"
 
-            git push origin "${{ github.head_ref }}"
+            git push origin "$PR_BRANCH"
 
             echo "Content synced and pushed successfully"
           fi
@@ -194,14 +227,17 @@ jobs:
         if: steps.check_sync.outputs.needs_sync == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          THEME_VERSION: ${{ steps.theme_version.outputs.version }}
         run: |
-          gh pr comment ${{ github.event.pull_request.number }} --body - <<'EOF'
+          gh pr comment "$PR_NUMBER" --body - <<EOF
           ✅ **Content automatically synced from theme**
 
-          This PR has been updated with content and i18n files from the theme repository (version `${{ steps.theme_version.outputs.version }}`):
+          This PR has been updated with content from the theme's exampleSite (version \`$THEME_VERSION\`):
+          - \`hugo.toml\` configuration (menus, params, languages)
           - Translation files (i18n/*.yaml)
-          - Example content for new languages
-          - Configuration examples (in .github/docs/)
+          - All content sections
+          - Static assets and data files
 
-          These changes are in a separate commit to demonstrate the new features added in the theme.
+          Demo-specific overrides were applied from \`.github/sync-config-overrides.sh\` if present.
           EOF
