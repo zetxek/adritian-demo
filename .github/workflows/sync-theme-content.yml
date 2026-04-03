@@ -159,18 +159,22 @@ jobs:
             echo "No content changes to sync"
           fi
 
-      - name: Commit and push content changes
+      - name: Create PR with content changes
         if: steps.check_changes.outputs.has_changes == 'true'
         env:
           SYNC_BRANCH: ${{ steps.determine_branch.outputs.branch }}
           THEME_REF: ${{ steps.determine_branch.outputs.theme_ref }}
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          echo "Files to be added:"
+          TIMESTAMP=$(date +%Y-%m-%d)
+          PR_BRANCH="sync-theme-content/${TIMESTAMP}"
+
+          git checkout -b "$PR_BRANCH"
+
           git add -v hugo.toml i18n/ content/ static/ data/ .github/ || true
 
-          echo "Files to be removed:"
-          git clean -fdn  # Dry run to show what will be removed
-          git clean -fd   # Remove untracked files like theme-checkout/
+          git clean -fdn
+          git clean -fd
 
           git commit -m "Sync content from theme" \
             -m "Synced configuration, i18n files and content from the theme's exampleSite." \
@@ -182,24 +186,30 @@ jobs:
             -m "" \
             -m "Theme ref: $THEME_REF"
 
-          git push origin "$SYNC_BRANCH"
+          git push origin "$PR_BRANCH" --force-with-lease
 
-          echo "Content synced and pushed successfully"
+          # Check if a PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head "$PR_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR already exists, updated with latest changes"
+          else
+            gh pr create \
+              --base "$SYNC_BRANCH" \
+              --head "$PR_BRANCH" \
+              --title "[auto] Sync content from theme" \
+              --body "$(cat <<'PREOF'
+          ## Summary
+          Automated sync of content from the theme's exampleSite.
 
-      - name: Add comment to PR if applicable
-        if: steps.check_changes.outputs.has_changes == 'true' && github.event.client_payload.pr_number
-        env:
-          GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
-        run: |
-          gh pr comment "$PR_NUMBER" --body - <<'EOF'
-          ✅ **Content synced from theme**
-
-          This PR has been updated with content from the theme's exampleSite:
+          This includes:
           - `hugo.toml` configuration (menus, params, languages)
           - Translation files (i18n/*.yaml)
           - All content sections
           - Static assets and data files
 
           Demo-specific overrides were applied from `.github/sync-config-overrides.sh` if present.
-          EOF
+
+          🤖 Created by [Sync Theme Content](https://github.com/zetxek/adritian-demo/actions/workflows/sync-theme-content.yml) workflow
+          PREOF
+          )"
+          fi

@@ -166,50 +166,63 @@ jobs:
             cp -r theme-checkout/exampleSite/data/* data/ 2>/dev/null || true
           fi
 
-      - name: Commit content changes
+      - name: Create PR with content changes
         if: steps.check_sync.outputs.needs_sync == 'true'
         env:
           THEME_VERSION: ${{ steps.theme_version.outputs.version }}
           THEME_COMMIT: ${{ steps.theme_version.outputs.commit_sha }}
-          PR_BRANCH: ${{ github.head_ref }}
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
 
-          if [[ -n $(git status -s) ]]; then
-            git add hugo.toml i18n/ content/ static/ data/ .github/ || true
-
-            git commit -m "Sync content from theme (auto)" \
-              -m "Automatically synced configuration and content from theme version $THEME_VERSION." \
-              -m "" \
-              -m "This includes:" \
-              -m "- hugo.toml configuration (menus, params, etc.)" \
-              -m "- Translation files (i18n)" \
-              -m "- All content sections" \
-              -m "- Static assets and data files" \
-              -m "" \
-              -m "Synced from commit: $THEME_COMMIT"
-
-            git push origin "$PR_BRANCH"
-
-            echo "Content synced and pushed successfully"
+          if [[ -z $(git status -s) ]]; then
+            echo "No changes to commit"
+            exit 0
           fi
 
-      - name: Add comment to PR
-        if: steps.check_sync.outputs.needs_sync == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          THEME_VERSION: ${{ steps.theme_version.outputs.version }}
-        run: |
-          gh pr comment "$PR_NUMBER" --body - <<EOF
-          ✅ **Content automatically synced from theme**
+          TIMESTAMP=$(date +%Y-%m-%d)
+          PR_BRANCH="sync-theme-content/auto-${TIMESTAMP}"
 
-          This PR has been updated with content from the theme's exampleSite (version \`$THEME_VERSION\`):
+          git checkout -b "$PR_BRANCH"
+
+          git add hugo.toml i18n/ content/ static/ data/ .github/ || true
+
+          git commit -m "Sync content from theme (auto)" \
+            -m "Automatically synced configuration and content from theme version $THEME_VERSION." \
+            -m "" \
+            -m "This includes:" \
+            -m "- hugo.toml configuration (menus, params, etc.)" \
+            -m "- Translation files (i18n)" \
+            -m "- All content sections" \
+            -m "- Static assets and data files" \
+            -m "" \
+            -m "Synced from commit: $THEME_COMMIT"
+
+          git push origin "$PR_BRANCH" --force-with-lease
+
+          # Check if a PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head "$PR_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR already exists, updated with latest changes"
+          else
+            gh pr create \
+              --base main \
+              --head "$PR_BRANCH" \
+              --title "[auto] Sync content from theme ($THEME_VERSION)" \
+              --body "$(cat <<PREOF
+          ## Summary
+          Automated sync of content from the theme's exampleSite (version \`$THEME_VERSION\`).
+
+          This includes:
           - \`hugo.toml\` configuration (menus, params, languages)
           - Translation files (i18n/*.yaml)
           - All content sections
           - Static assets and data files
 
-          Demo-specific overrides were applied from \`.github/sync-config-overrides.sh\` if present.
-          EOF
+          Synced from commit: $THEME_COMMIT
+
+          🤖 Created by [Auto-sync Theme Content](https://github.com/zetxek/adritian-demo/actions/workflows/auto-sync-content.yml) workflow
+          PREOF
+          )"
+          fi
