@@ -167,7 +167,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           TIMESTAMP=$(date +%Y-%m-%d)
-          PR_BRANCH="sync-theme-content/${TIMESTAMP}"
+          SYNC_BRANCH_SLUG=$(printf '%s' "$SYNC_BRANCH" | tr '/[:space:]' '-' | tr -cd '[:alnum:]._-')
+          if [ -z "$SYNC_BRANCH_SLUG" ]; then
+            SYNC_BRANCH_SLUG="default"
+          fi
+          PR_BRANCH="sync-theme-content/${SYNC_BRANCH_SLUG}/${TIMESTAMP}"
 
           git checkout -b "$PR_BRANCH"
 
@@ -186,7 +190,13 @@ jobs:
             -m "" \
             -m "Theme ref: $THEME_REF"
 
-          git push origin "$PR_BRANCH" --force-with-lease
+          # Fetch remote branch if it exists, then push
+          git fetch origin "$PR_BRANCH" 2>/dev/null || true
+          if git ls-remote --heads origin "$PR_BRANCH" | grep -q "$PR_BRANCH"; then
+            git push origin "$PR_BRANCH" --force-with-lease
+          else
+            git push origin "$PR_BRANCH"
+          fi
 
           # Check if a PR already exists for this branch
           EXISTING_PR=$(gh pr list --head "$PR_BRANCH" --state open --json number --jq '.[0].number')
