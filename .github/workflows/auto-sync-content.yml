@@ -166,7 +166,7 @@ jobs:
             cp -r theme-checkout/exampleSite/data/* data/ 2>/dev/null || true
           fi
 
-      - name: Commit content changes
+      - name: Commit and push content changes to PR branch
         if: steps.check_sync.outputs.needs_sync == 'true'
         env:
           THEME_VERSION: ${{ steps.theme_version.outputs.version }}
@@ -176,24 +176,27 @@ jobs:
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
 
-          if [[ -n $(git status -s) ]]; then
-            git add hugo.toml i18n/ content/ static/ data/ .github/ || true
-
-            git commit -m "Sync content from theme (auto)" \
-              -m "Automatically synced configuration and content from theme version $THEME_VERSION." \
-              -m "" \
-              -m "This includes:" \
-              -m "- hugo.toml configuration (menus, params, etc.)" \
-              -m "- Translation files (i18n)" \
-              -m "- All content sections" \
-              -m "- Static assets and data files" \
-              -m "" \
-              -m "Synced from commit: $THEME_COMMIT"
-
-            git push origin "$PR_BRANCH"
-
-            echo "Content synced and pushed successfully"
+          if [[ -z $(git status -s) ]]; then
+            echo "No changes to commit"
+            exit 0
           fi
+
+          git add hugo.toml i18n/ content/ static/ data/ .github/ || true
+
+          git commit -m "Sync content from theme (auto)" \
+            -m "Automatically synced configuration and content from theme version $THEME_VERSION." \
+            -m "" \
+            -m "This includes:" \
+            -m "- hugo.toml configuration (menus, params, etc.)" \
+            -m "- Translation files (i18n)" \
+            -m "- All content sections" \
+            -m "- Static assets and data files" \
+            -m "" \
+            -m "Synced from commit: $THEME_COMMIT"
+
+          git push origin "$PR_BRANCH"
+
+          echo "Content synced and pushed to PR branch successfully"
 
       - name: Add comment to PR
         if: steps.check_sync.outputs.needs_sync == 'true'
