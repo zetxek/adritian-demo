@@ -150,13 +150,17 @@ jobs:
           git config --global user.name 'Git bot'
           git config --global user.email 'bot@noreply.github.com'
 
-          if [[ -n $(git status -s) ]]; then
+          # Check for changes only in synced paths (ignore theme-checkout/)
+          git add hugo.toml i18n/ content/ static/ data/ .github/ 2>/dev/null || true
+          if [[ -n $(git diff --cached --name-only) ]]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "Changes detected:"
-            git status -s
+            git diff --cached --name-only
+            git reset HEAD -- . > /dev/null
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "No content changes to sync"
+            git reset HEAD -- . > /dev/null
           fi
 
       - name: Create PR with content changes
@@ -175,10 +179,16 @@ jobs:
 
           git checkout -b "$PR_BRANCH"
 
-          git add -v hugo.toml i18n/ content/ static/ data/ .github/ || true
+          git add hugo.toml i18n/ content/ static/ data/ .github/ || true
 
           git clean -fdn
           git clean -fd
+
+          # Exit early if nothing was actually staged
+          if [[ -z $(git diff --cached --name-only) ]]; then
+            echo "No staged changes to commit, skipping"
+            exit 0
+          fi
 
           git commit -m "Sync content from theme" \
             -m "Synced configuration, i18n files and content from the theme's exampleSite." \
