@@ -126,28 +126,8 @@ jobs:
 
           echo "Syncing content from theme's exampleSite..."
 
-          # Sync all content directories from exampleSite
-          shopt -s nullglob
-          for dir in theme-checkout/exampleSite/content/*/; do
-            section=$(basename "$dir")
-            mkdir -p "content/$section"
-
-            for file in "$dir"*; do
-              [ -f "$file" ] || continue
-              filename=$(basename "$file")
-              cp "$file" "content/$section/$filename"
-              echo "Copied $section/$filename"
-            done
-          done
-          shopt -u nullglob
-
-          # Sync root-level content files (search.md, cv.md, showcase.md, etc.)
-          for file in theme-checkout/exampleSite/content/*.md; do
-            [ -f "$file" ] || continue
-            filename=$(basename "$file")
-            cp "$file" "content/$filename"
-            echo "Copied root content: $filename"
-          done
+          # Recursively sync all content from exampleSite (including page bundles)
+          rsync -av --exclude='.git' theme-checkout/exampleSite/content/ content/
 
       - name: Sync static assets from theme exampleSite
         run: |

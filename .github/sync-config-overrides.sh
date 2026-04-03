@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # Demo-specific overrides for hugo.toml after syncing from theme's exampleSite.
 #
 # This script is run by the sync-theme-content workflow after copying
@@ -8,6 +9,11 @@
 # Usage: bash .github/sync-config-overrides.sh hugo.toml
 
 CONFIG_FILE="${1:-hugo.toml}"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "Error: Configuration file '$CONFIG_FILE' not found."
+  exit 1
+fi
 
 # Example overrides (uncomment and adjust as needed):
 #
