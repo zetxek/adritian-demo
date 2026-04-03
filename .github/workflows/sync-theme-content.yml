@@ -1,8 +1,7 @@
 name: Sync Theme Content
 
-# This workflow syncs content (i18n files, example content) from the theme repository
-# when theme updates are made, especially when PRs in the theme repo contain new
-# languages, configurations, or demo content.
+# This workflow syncs content (i18n files, example content, and configuration)
+# from the theme repository's exampleSite when theme updates are made.
 
 permissions:
   contents: write
@@ -34,17 +33,22 @@ jobs:
     steps:
       - name: Determine branch and commit
         id: determine_branch
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_BRANCH: ${{ github.event.client_payload.branch }}
+          DISPATCH_THEME_REF: ${{ github.event.client_payload.theme_ref }}
+          DISPATCH_THEME_BRANCH: ${{ github.event.client_payload.theme_branch }}
+          INPUT_BRANCH: ${{ github.event.inputs.branch }}
+          INPUT_THEME_BRANCH: ${{ github.event.inputs.theme_branch }}
         run: |
-          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
-            # Get from dispatch payload
-            BRANCH="${{ github.event.client_payload.branch }}"
-            THEME_REF="${{ github.event.client_payload.theme_ref }}"
-            THEME_BRANCH="${{ github.event.client_payload.theme_branch }}"
+          if [ "$EVENT_NAME" == "repository_dispatch" ]; then
+            BRANCH="$DISPATCH_BRANCH"
+            THEME_REF="$DISPATCH_THEME_REF"
+            THEME_BRANCH="$DISPATCH_THEME_BRANCH"
           else
-            # Get from workflow inputs (defaults to 'main' if not provided)
-            BRANCH="${{ github.event.inputs.branch }}"
-            THEME_REF="${{ github.event.inputs.theme_branch }}"
-            THEME_BRANCH="${{ github.event.inputs.theme_branch }}"
+            BRANCH="$INPUT_BRANCH"
+            THEME_REF="$INPUT_THEME_BRANCH"
+            THEME_BRANCH="$INPUT_THEME_BRANCH"
           fi
 
           # Ensure branch has a value, fallback to main if empty
@@ -77,19 +81,34 @@ jobs:
           path: theme-checkout
           token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
 
+      - name: Sync hugo.toml from theme
+        run: |
+          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
+            echo "Syncing hugo.toml from theme's exampleSite..."
+
+            # Copy the theme's exampleSite hugo.toml as the base config
+            cp theme-checkout/exampleSite/hugo.toml hugo.toml
+
+            # Apply demo-specific overrides if the override script exists
+            if [ -f ".github/sync-config-overrides.sh" ]; then
+              echo "Applying demo-specific config overrides..."
+              bash .github/sync-config-overrides.sh hugo.toml
+            fi
+
+            echo "hugo.toml synced successfully"
+          else
+            echo "No hugo.toml found in theme's exampleSite"
+          fi
+
       - name: Sync i18n files from theme
         run: |
-          # Copy i18n files from theme to demo repo, excluding files that already exist
-          # to avoid overwriting customizations, but include new language files
-
           if [ -d "theme-checkout/i18n" ]; then
             echo "Syncing i18n files from theme..."
             mkdir -p i18n
 
-            shopt -s nullglob  # Prevent literal glob strings
+            shopt -s nullglob
             for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
               filename=$(basename "$file")
-              # Copy new language files or update existing ones
               cp "$file" "i18n/$filename"
               echo "Copied $filename"
             done
@@ -98,69 +117,31 @@ jobs:
             echo "No i18n directory found in theme"
           fi
 
-      - name: Sync example content from theme
+      - name: Sync content from theme exampleSite
         run: |
-          # Copy example content from theme's exampleSite to demo repo
-          # This includes homepage content in different languages
-
-          if [ -d "theme-checkout/exampleSite/content" ]; then
-            echo "Syncing example content from theme..."
-
-            # Sync home section content (translated versions)
-            if [ -d "theme-checkout/exampleSite/content/home" ]; then
-              mkdir -p content/home
-
-              shopt -s nullglob  # Prevent literal glob strings
-              for file in theme-checkout/exampleSite/content/home/*; do
-                filename=$(basename "$file")
-                # Only copy language-specific files (e.g., home.ar.md, home.he.md)
-                # Skip the base home.md to preserve demo customizations
-                if [[ "$filename" == *.*.md && "$filename" != "home.md" ]]; then
-                  cp "$file" "content/home/$filename"
-                  echo "Copied $filename"
-                fi
-              done
-              shopt -u nullglob
-            fi
-
-            # Sync other translated content if present
-            for section in blog education experience projects skills testimonial; do
-              if [ -d "theme-checkout/exampleSite/content/$section" ]; then
-                mkdir -p "content/$section"
-                # Copy language-specific files for each section
-                shopt -s nullglob  # Prevent literal glob strings
-                for file in theme-checkout/exampleSite/content/$section/*; do
-                  filename=$(basename "$file")
-                  # Only copy language-specific files (e.g., *.ar.md, *.he.md)
-                  if [[ "$filename" == *.*.md ]]; then
-                    cp "$file" "content/$section/$filename"
-                    echo "Copied $filename to $section"
-                  fi
-                done
-                shopt -u nullglob
-              fi
-            done
-          else
+          if [ ! -d "theme-checkout/exampleSite/content" ]; then
             echo "No exampleSite/content directory found in theme"
+            exit 0
           fi
 
-      - name: Sync configuration examples if needed
-        run: |
-          # Check if there are config examples in the theme that should be documented
-          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
-            echo "Theme has example configuration. Check for language settings..."
+          echo "Syncing content from theme's exampleSite..."
 
-            # Extract language configuration from theme's example
-            if grep -q "\[languages\." theme-checkout/exampleSite/hugo.toml; then
-              echo "Found language configuration in theme example"
-              # Create a reference file for documentation purposes
-              mkdir -p .github/docs
-              # Extract language configuration section (up to 50 lines max)
-              # This captures the [languages] section and related config
-              grep -A 50 "\[languages\." theme-checkout/exampleSite/hugo.toml > .github/docs/language-config-example.toml || true
-              echo "Saved language configuration example to .github/docs/language-config-example.toml"
-              echo "Note: If language config is longer than 50 lines, it may be truncated."
-            fi
+          # Recursively sync all content from exampleSite (including page bundles)
+          rsync -av --exclude='.git' theme-checkout/exampleSite/content/ content/
+
+      - name: Sync static assets from theme exampleSite
+        run: |
+          if [ -d "theme-checkout/exampleSite/static" ]; then
+            echo "Syncing static assets from theme's exampleSite..."
+            cp -r theme-checkout/exampleSite/static/* static/ 2>/dev/null || true
+          fi
+
+      - name: Sync data files from theme exampleSite
+        run: |
+          if [ -d "theme-checkout/exampleSite/data" ]; then
+            echo "Syncing data files from theme's exampleSite..."
+            mkdir -p data
+            cp -r theme-checkout/exampleSite/data/* data/ 2>/dev/null || true
           fi
 
       - name: Check for changes
@@ -180,25 +161,28 @@ jobs:
 
       - name: Commit and push content changes
         if: steps.check_changes.outputs.has_changes == 'true'
+        env:
+          SYNC_BRANCH: ${{ steps.determine_branch.outputs.branch }}
+          THEME_REF: ${{ steps.determine_branch.outputs.theme_ref }}
         run: |
           echo "Files to be added:"
-          git add -v i18n/ content/ .github/docs/ || true
-          
+          git add -v hugo.toml i18n/ content/ static/ data/ .github/ || true
+
           echo "Files to be removed:"
           git clean -fdn  # Dry run to show what will be removed
-          git clean -fd   # Actually remove untracked files like theme-checkout/
+          git clean -fd   # Remove untracked files like theme-checkout/
 
-          # Create detailed commit message
           git commit -m "Sync content from theme" \
-            -m "Synced i18n files and example content from the theme repository." \
+            -m "Synced configuration, i18n files and content from the theme's exampleSite." \
             -m "This includes:" \
-            -m "- Translation files for new languages" \
-            -m "- Example content for different languages" \
-            -m "- Configuration examples" \
+            -m "- hugo.toml configuration (menus, params, etc.)" \
+            -m "- Translation files (i18n)" \
+            -m "- All content sections" \
+            -m "- Static assets and data files" \
             -m "" \
-            -m "Theme ref: ${{ steps.determine_branch.outputs.theme_ref }}"
+            -m "Theme ref: $THEME_REF"
 
-          git push origin "${{ steps.determine_branch.outputs.branch }}"
+          git push origin "$SYNC_BRANCH"
 
           echo "Content synced and pushed successfully"
 
@@ -206,16 +190,16 @@ jobs:
         if: steps.check_changes.outputs.has_changes == 'true' && github.event.client_payload.pr_number
         env:
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
         run: |
-          PR_NUMBER="${{ github.event.client_payload.pr_number }}"
-
           gh pr comment "$PR_NUMBER" --body - <<'EOF'
           ✅ **Content synced from theme**
 
-          This PR has been updated with content and i18n files from the theme repository:
+          This PR has been updated with content from the theme's exampleSite:
+          - `hugo.toml` configuration (menus, params, languages)
           - Translation files (i18n/*.yaml)
-          - Example content for new languages
-          - Configuration examples (in .github/docs/)
+          - All content sections
+          - Static assets and data files
 
-          These changes are in a separate commit to demonstrate the new features added in the theme.
+          Demo-specific overrides were applied from `.github/sync-config-overrides.sh` if present.
           EOF
