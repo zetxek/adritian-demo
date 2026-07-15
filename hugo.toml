@@ -1,5 +1,5 @@
 baseURL = "https://adritian-demo.vercel.app/"
-title = "Adritian Demo"
+title = "Demo site for Adritian - a high performance hugo theme by Adrián Moreno"
 languageCode = "en"
 
 [pagination]
@@ -160,7 +160,7 @@ disabled = false
 languageCode = 'en'
 languageDirection = 'ltr'
 languageName = 'English'
-title = ''
+title = 'Demo site for Adritian - a high performance hugo theme by Adrián Moreno'
 weight = 0
 
 [languages.en.menus]
@@ -233,7 +233,7 @@ disabled = false
 languageCode = 'es'
 languageDirection = 'ltr'
 languageName = 'Español'
-title = ''
+title = 'Sitio demo de Adritian - un tema Hugo de alto rendimiento por Adrián Moreno'
 weight = 0
 [[languages.es.menus.header]]
 name = "INICIO"
@@ -304,7 +304,7 @@ disabled = false
 languageCode = 'fr'
 languageDirection = 'ltr'
 languageName = 'Français'
-title = ''
+title = 'Site de démonstration pour Adritian - un thème Hugo haute performance par Adrián Moreno'
 weight = 0
 
 [languages.fr.menus]
@@ -375,7 +375,7 @@ disabled = false
 languageCode = 'ar'
 languageDirection = 'rtl'
 languageName = 'العربية'
-title = ''
+title = 'موقع تجريبي لأدريتيان - قالب هوغو عالي الأداء من إنشاء أدريان مورينو'
 weight = 0
 
 [languages.ar.menus]
@@ -437,7 +437,7 @@ disabled = false
 languageCode = 'he'
 languageDirection = 'rtl'
 languageName = 'עברית'
-title = ''
+title = 'אתר דמו לאדריטיאן - תבנית הוגו בביצועים גבוהים מאת אדריאן מורנו'
 weight = 0
 
 [languages.he.menus]
