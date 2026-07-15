@@ -1,6 +1,6 @@
 baseURL = "https://adritian-demo.vercel.app/"
 title = "Adritian Demo"
-languageCode = "en"
+locale = "en"
 
 [pagination]
 pagerSize = 3
@@ -74,14 +74,32 @@ target = "assets/css/bootstrap-print.css"
 
 
 [params]
-title = 'Adritian - a high performance hugo theme by Adrián Moreno'
-description = 'This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications.'
+title = 'Adritian Demo'
+description = 'Adritian Demo — a high performance Hugo theme'
 images = ['/img/og-img.png']
 themeColor = '#478079'
 
+# Header logo text. Optional — falls back to .Site.Title when unset.
+# Useful when your SEO/page `title` (long, keyword-rich) should differ
+# from the short brand text shown in the header. See PR #561.
+logo_text1 = 'Adritian'
+logo_text2 = 'Theme'
+
+# Color scheme: default | ocean | forest | rose | slate | midnight | warm
+colorScheme = 'default'
+
+# Enable the live color scheme switcher (for the demo site)
+[params.colorSchemeSwitcher]
+enable = true
+
+# Color scheme selector visibility — set to true to hide in that location
+[params.colorSchemeSwitcher.selector.disable]
+footer = false
+header = false
+
 [params.seo]
 siteName = 'Adritian'
-siteDescription = 'This hugo theme (Adritian) is based on Bootstrap and has features that make it suitable for a personal site, a portfolio or other kind of Single Page Applications.'
+siteDescription = 'Adritian Demo — a high performance Hugo theme'
 siteImage = '/img/og-img.png'
 
 [params.social]
@@ -157,10 +175,9 @@ mobileHeader = false
 [languages]
 [languages.en]
 disabled = false
-languageCode = 'en'
-languageDirection = 'ltr'
-languageName = 'English'
-title = ''
+locale = 'en'
+direction = 'ltr'
+label = 'English'
 weight = 0
 
 [languages.en.menus]
@@ -230,10 +247,9 @@ weight = 4
 
 [languages.es]
 disabled = false
-languageCode = 'es'
-languageDirection = 'ltr'
-languageName = 'Español'
-title = ''
+locale = 'es'
+direction = 'ltr'
+label = 'Español'
 weight = 0
 [[languages.es.menus.header]]
 name = "INICIO"
@@ -290,7 +306,7 @@ URL = "/es/#about"
 weight = 2
 
 [[languages.es.menus.footer]]
-name = "Portafolio"
+name = "Portfolio"
 URL = "/es/#client-and-work-section"
 weight = 3
 
@@ -301,10 +317,9 @@ weight = 4
 
 [languages.fr]
 disabled = false
-languageCode = 'fr'
-languageDirection = 'ltr'
-languageName = 'Français'
-title = ''
+locale = 'fr'
+direction = 'ltr'
+label = 'Français'
 weight = 0
 
 [languages.fr.menus]
@@ -330,7 +345,7 @@ weight = 4
 #  weight = 4
 
 [[languages.fr.menus.header]]
-name = "Showcase"
+name = "Vitrine"
 URL = "/showcase"
 weight = 5
 
@@ -372,10 +387,9 @@ weight = 4
 
 [languages.ar]
 disabled = false
-languageCode = 'ar'
-languageDirection = 'rtl'
-languageName = 'العربية'
-title = ''
+locale = 'ar'
+direction = 'rtl'
+label = 'العربية'
 weight = 0
 
 [languages.ar.menus]
@@ -434,10 +448,9 @@ weight = 4
 
 [languages.he]
 disabled = false
-languageCode = 'he'
-languageDirection = 'rtl'
-languageName = 'עברית'
-title = ''
+locale = 'he'
+direction = 'rtl'
+label = 'עברית'
 weight = 0
 
 [languages.he.menus]
@@ -563,6 +576,10 @@ featured_sort_by_date = false
 
 [params.experience]
 showJobCard = true # Set to false to hide the job card
+
+# Navbar overflow handling - options: "dropdown" | "footer" | "none"
+[params.navbarOverflow]
+mode = "dropdown" # "dropdown" moves items to More dropdown, "footer" moves to footer, "none" disables
 
 
 # Performance optimizations
