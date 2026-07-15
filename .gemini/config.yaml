@@ -1,0 +1,8 @@
+# Gemini Code Assist configuration
+# Disable automated PR reviews, summaries, and comments from the
+# gemini-code-assist GitHub app on this repository.
+# Schema: https://docs.cloud.google.com/gemini/docs/code-review/customize-repo-review
+have_fun: false
+code_review:
+  # Disables Gemini from acting on pull requests (reviews, summaries, help).
+  disable: true
