@@ -1,37 +1,44 @@
 name: Sync Theme Content
 
-# This workflow syncs content (i18n files, example content, and configuration)
-# from the theme repository's exampleSite when theme updates are made.
+# Mirrors the theme repository's exampleSite (hugo.toml, content, static,
+# data, assets, i18n) into the demo and opens/updates a single PR.
+#
+# The theme sends a `sync-theme-content` repository_dispatch on every push
+# to its main branch with client_payload:
+#   {branch: "main", theme_ref: "<sha>", theme_branch: "main"}
 
 permissions:
   contents: write
   pull-requests: write
 
 on:
-  # Triggered by the theme repository via repository_dispatch
   repository_dispatch:
     types: [sync-theme-content]
 
-  # Can be manually triggered to sync content for an existing PR
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch name in adritian-demo to sync content to (defaults to main)'
+        description: 'Branch in adritian-demo to sync content to (defaults to main)'
         required: false
         default: 'main'
         type: string
       theme_branch:
-        description: 'Theme branch to sync from (defaults to main)'
+        description: 'Theme branch or commit SHA to sync from (defaults to main)'
         required: false
         default: 'main'
         type: string
+
+# Serialize runs per target branch so force-pushes to the sync branch don't race
+concurrency:
+  group: sync-theme-content-${{ github.event.client_payload.branch || github.event.inputs.branch || 'main' }}
+  cancel-in-progress: false
 
 jobs:
   sync-content:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Determine branch and commit
+      - name: Determine and validate inputs
         id: determine_branch
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -51,14 +58,30 @@ jobs:
             THEME_BRANCH="$INPUT_THEME_BRANCH"
           fi
 
-          # Ensure branch has a value, fallback to main if empty
-          if [ -z "$BRANCH" ]; then
-            BRANCH="main"
+          BRANCH="${BRANCH:-main}"
+          THEME_BRANCH="${THEME_BRANCH:-main}"
+          THEME_REF="${THEME_REF:-$THEME_BRANCH}"
+
+          is_branch_name() {
+            [[ "$1" =~ ^[A-Za-z0-9._/-]+$ ]] && [[ "$1" != -* ]] && [[ "$1" != *..* ]]
+          }
+
+          if [ "$BRANCH" != "main" ] && ! is_branch_name "$BRANCH"; then
+            echo "::error::Invalid branch: must be 'main' or match ^[A-Za-z0-9._/-]+\$"
+            exit 1
+          fi
+          if ! is_branch_name "$THEME_BRANCH"; then
+            echo "::error::Invalid theme_branch: must match ^[A-Za-z0-9._/-]+\$"
+            exit 1
+          fi
+          if ! [[ "$THEME_REF" =~ ^[0-9a-f]{7,40}$ ]] && ! is_branch_name "$THEME_REF"; then
+            echo "::error::Invalid theme_ref: must be a commit SHA (^[0-9a-f]{7,40}\$) or a branch name"
+            exit 1
           fi
 
-          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
-          echo "theme_ref=$THEME_REF" >> $GITHUB_OUTPUT
-          echo "theme_branch=$THEME_BRANCH" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "theme_ref=$THEME_REF" >> "$GITHUB_OUTPUT"
+          echo "theme_branch=$THEME_BRANCH" >> "$GITHUB_OUTPUT"
 
       - name: Checkout demo repository
         uses: actions/checkout@v4
@@ -66,12 +89,6 @@ jobs:
           ref: ${{ steps.determine_branch.outputs.branch }}
           token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: 'latest'
-          extended: true
 
       - name: Checkout theme repository
         uses: actions/checkout@v4
@@ -81,155 +98,63 @@ jobs:
           path: theme-checkout
           token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - name: Sync hugo.toml from theme
+      - name: Resolve theme commit
+        id: theme_commit
         run: |
-          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
-            echo "Syncing hugo.toml from theme's exampleSite..."
+          echo "sha=$(git -C theme-checkout rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$(git -C theme-checkout rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
 
-            # Copy the theme's exampleSite hugo.toml as the base config
-            cp theme-checkout/exampleSite/hugo.toml hugo.toml
+      - name: Mirror theme exampleSite
+        run: bash .github/sync-theme-content.sh theme-checkout
 
-            # Apply demo-specific overrides if the override script exists
-            if [ -f ".github/sync-config-overrides.sh" ]; then
-              echo "Applying demo-specific config overrides..."
-              bash .github/sync-config-overrides.sh hugo.toml
-            fi
-
-            echo "hugo.toml synced successfully"
-          else
-            echo "No hugo.toml found in theme's exampleSite"
-          fi
-
-      - name: Sync i18n files from theme
-        run: |
-          if [ -d "theme-checkout/i18n" ]; then
-            echo "Syncing i18n files from theme..."
-            mkdir -p i18n
-
-            shopt -s nullglob
-            for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
-              filename=$(basename "$file")
-              cp "$file" "i18n/$filename"
-              echo "Copied $filename"
-            done
-            shopt -u nullglob
-          else
-            echo "No i18n directory found in theme"
-          fi
-
-      - name: Sync content from theme exampleSite
-        run: |
-          if [ ! -d "theme-checkout/exampleSite/content" ]; then
-            echo "No exampleSite/content directory found in theme"
-            exit 0
-          fi
-
-          echo "Syncing content from theme's exampleSite..."
-
-          # Recursively sync all content from exampleSite (including page bundles)
-          rsync -av --exclude='.git' theme-checkout/exampleSite/content/ content/
-
-      - name: Sync static assets from theme exampleSite
-        run: |
-          if [ -d "theme-checkout/exampleSite/static" ]; then
-            echo "Syncing static assets from theme's exampleSite..."
-            cp -r theme-checkout/exampleSite/static/* static/ 2>/dev/null || true
-          fi
-
-      - name: Sync data files from theme exampleSite
-        run: |
-          if [ -d "theme-checkout/exampleSite/data" ]; then
-            echo "Syncing data files from theme's exampleSite..."
-            mkdir -p data
-            cp -r theme-checkout/exampleSite/data/* data/ 2>/dev/null || true
-          fi
-
-      - name: Check for changes
-        id: check_changes
-        run: |
-          git config --global user.name 'Git bot'
-          git config --global user.email 'bot@noreply.github.com'
-
-          # Check for changes only in synced paths (ignore theme-checkout/)
-          git add hugo.toml i18n/ content/ static/ data/ .github/ 2>/dev/null || true
-          if [[ -n $(git diff --cached --name-only) ]]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected:"
-            git diff --cached --name-only
-            git reset HEAD -- . > /dev/null
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No content changes to sync"
-            git reset HEAD -- . > /dev/null
-          fi
-
-      - name: Create PR with content changes
-        if: steps.check_changes.outputs.has_changes == 'true'
+      - name: Create or update PR
         env:
-          SYNC_BRANCH: ${{ steps.determine_branch.outputs.branch }}
-          THEME_REF: ${{ steps.determine_branch.outputs.theme_ref }}
+          BASE_BRANCH: ${{ steps.determine_branch.outputs.branch }}
+          THEME_BRANCH: ${{ steps.determine_branch.outputs.theme_branch }}
+          THEME_SHA: ${{ steps.theme_commit.outputs.sha }}
+          THEME_SHORT_SHA: ${{ steps.theme_commit.outputs.short_sha }}
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          TIMESTAMP=$(date +%Y-%m-%d)
-          SYNC_BRANCH_SLUG=$(printf '%s' "$SYNC_BRANCH" | tr '/[:space:]' '-' | tr -cd '[:alnum:]._-')
-          if [ -z "$SYNC_BRANCH_SLUG" ]; then
-            SYNC_BRANCH_SLUG="default"
-          fi
-          PR_BRANCH="sync-theme-content/${SYNC_BRANCH_SLUG}/${TIMESTAMP}"
-
-          git checkout -b "$PR_BRANCH"
-
-          git add hugo.toml i18n/ content/ static/ data/ .github/ || true
-
-          git clean -fdn
-          git clean -fd
-
-          # Exit early if nothing was actually staged
           if [[ -z $(git diff --cached --name-only) ]]; then
-            echo "No staged changes to commit, skipping"
+            echo "Demo already mirrors theme $THEME_SHORT_SHA, nothing to do"
             exit 0
           fi
 
-          git commit -m "Sync content from theme" \
-            -m "Synced configuration, i18n files and content from the theme's exampleSite." \
-            -m "This includes:" \
-            -m "- hugo.toml configuration (menus, params, etc.)" \
-            -m "- Translation files (i18n)" \
-            -m "- All content sections" \
-            -m "- Static assets and data files" \
-            -m "" \
-            -m "Theme ref: $THEME_REF"
+          # One stable branch per target branch: re-running force-pushes it
+          # and updates the open PR instead of opening a new one.
+          PR_BRANCH="sync-theme-content/${BASE_BRANCH}"
+          THEME_COMMIT_URL="https://github.com/zetxek/adritian-free-hugo-theme/commit/${THEME_SHA}"
+          TITLE="[auto] Sync content from theme @ ${THEME_SHORT_SHA}"
 
-          # Fetch remote branch if it exists, then push
-          git fetch origin "$PR_BRANCH" 2>/dev/null || true
-          if git ls-remote --heads origin "$PR_BRANCH" | grep -q "$PR_BRANCH"; then
-            git push origin "$PR_BRANCH" --force-with-lease
-          else
-            git push origin "$PR_BRANCH"
-          fi
+          git config user.name 'Git bot'
+          git config user.email 'bot@noreply.github.com'
 
-          # Check if a PR already exists for this branch
-          EXISTING_PR=$(gh pr list --head "$PR_BRANCH" --state open --json number --jq '.[0].number')
-          if [ -n "$EXISTING_PR" ]; then
-            echo "PR #$EXISTING_PR already exists, updated with latest changes"
-          else
-            gh pr create \
-              --base "$SYNC_BRANCH" \
-              --head "$PR_BRANCH" \
-              --title "[auto] Sync content from theme" \
-              --body "$(cat <<'PREOF'
+          git checkout -b "$PR_BRANCH"
+          git commit -m "Sync content from theme @ ${THEME_SHORT_SHA}" \
+            -m "Mirrored the theme's exampleSite (hugo.toml, content, static, data, assets, i18n)." \
+            -m "Theme commit: ${THEME_SHA} (${THEME_BRANCH})"
+          git push --force origin "HEAD:refs/heads/${PR_BRANCH}"
+
+          BODY=$(cat <<EOF
           ## Summary
-          Automated sync of content from the theme's exampleSite.
+          Mirrors the theme's exampleSite at [\`${THEME_SHORT_SHA}\`](${THEME_COMMIT_URL}) (\`${THEME_BRANCH}\`) into the demo.
 
-          This includes:
-          - `hugo.toml` configuration (menus, params, languages)
-          - Translation files (i18n/*.yaml)
-          - All content sections
-          - Static assets and data files
+          - \`hugo.toml\` (with overrides from \`.github/sync-config-overrides.sh\`)
+          - \`content/\`, \`static/\`, \`data/\`, \`assets/\` mirrored exactly (files removed from the theme are removed here; \`assets/css/critical.css\` is kept)
+          - \`i18n/\` mirrored from \`exampleSite/i18n\`, or removed when the exampleSite has none (translations come from the theme module)
 
-          Demo-specific overrides were applied from `.github/sync-config-overrides.sh` if present.
+          This PR is force-updated by each sync run, so it always reflects the latest theme commit.
 
-          🤖 Created by [Sync Theme Content](https://github.com/zetxek/adritian-demo/actions/workflows/sync-theme-content.yml) workflow
-          PREOF
-          )"
+          Theme commit: ${THEME_SHA}
+
+          🤖 Created by [Sync Theme Content](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}) workflow
+          EOF
+          )
+
+          EXISTING_PR=$(gh pr list --head "$PR_BRANCH" --base "$BASE_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            gh pr edit "$EXISTING_PR" --title "$TITLE" --body "$BODY"
+            echo "Updated PR #$EXISTING_PR"
+          else
+            gh pr create --base "$BASE_BRANCH" --head "$PR_BRANCH" --title "$TITLE" --body "$BODY"
           fi

@@ -1,7 +1,8 @@
 name: Auto-sync Theme Content on Module Update
 
-# This workflow automatically syncs content from the theme after module updates
-# It runs when go.mod is updated in a PR, detecting theme version changes
+# Mirrors the theme's exampleSite into theme-update preview PRs, using the
+# theme commit pinned in go.mod. Shares .github/sync-theme-content.sh with
+# the sync-theme-content workflow.
 
 permissions:
   contents: write
@@ -29,190 +30,76 @@ jobs:
           token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: 'latest'
-          extended: true
-
       - name: Get theme version
         id: theme_version
         run: |
-          # Extract theme version from go.mod
           THEME_VERSION=$(grep "github.com/zetxek/adritian-free-hugo-theme" go.mod | awk '{print $2}')
-          echo "version=$THEME_VERSION" >> $GITHUB_OUTPUT
           echo "Theme version: $THEME_VERSION"
 
-          # Try to extract commit SHA from pseudo-version
-          # Pseudo-version format: v0.0.0-yyyymmddhhmmss-abcdefabcdef
-          # where abcdefabcdef is the first 12 chars of the commit SHA
-          if [[ $THEME_VERSION =~ -([0-9]+)\.[0-9]+-([0-9a-f]+)$ ]]; then
-            COMMIT_SHA="${BASH_REMATCH[2]}"
-            echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
-            echo "Extracted commit SHA: $COMMIT_SHA"
+          # Pseudo-version: v0.0.0-yyyymmddhhmmss-abcdefabcdef (12-char commit SHA)
+          # Release: vX.Y.Z (a tag in the theme repo)
+          if [[ "$THEME_VERSION" =~ -[0-9]{14}-([0-9a-f]{12})$ ]]; then
+            THEME_REF="${BASH_REMATCH[1]}"
+          elif [[ "$THEME_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            THEME_REF="$THEME_VERSION"
           else
-            echo "Could not extract commit SHA from version"
-            echo "commit_sha=" >> $GITHUB_OUTPUT
+            echo "::warning::Could not derive a theme ref from '$THEME_VERSION', skipping sync"
+            THEME_REF=""
           fi
 
+          echo "version=$THEME_VERSION" >> "$GITHUB_OUTPUT"
+          echo "ref=$THEME_REF" >> "$GITHUB_OUTPUT"
+
       - name: Checkout theme repository
-        if: steps.theme_version.outputs.commit_sha != ''
+        if: steps.theme_version.outputs.ref != ''
         uses: actions/checkout@v4
         with:
           repository: zetxek/adritian-free-hugo-theme
-          ref: ${{ steps.theme_version.outputs.commit_sha }}
+          ref: ${{ steps.theme_version.outputs.ref }}
           path: theme-checkout
           token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - name: Check if content sync is needed
-        if: steps.theme_version.outputs.commit_sha != ''
-        id: check_sync
+      - name: Mirror theme exampleSite
+        id: sync
+        if: steps.theme_version.outputs.ref != ''
         run: |
-          NEEDS_SYNC=false
-
-          # Check if theme hugo.toml differs from demo (after applying overrides)
-          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
-            TEMP_HUGO_TOML=$(mktemp)
-            trap 'rm -f "$TEMP_HUGO_TOML"' EXIT
-            cp "theme-checkout/exampleSite/hugo.toml" "$TEMP_HUGO_TOML"
-
-            if [ -f ".github/sync-config-overrides.sh" ]; then
-              bash .github/sync-config-overrides.sh "$TEMP_HUGO_TOML"
-            fi
-
-            if ! diff -q hugo.toml "$TEMP_HUGO_TOML" > /dev/null 2>&1; then
-              echo "hugo.toml differs from theme (after overrides)"
-              NEEDS_SYNC=true
-            fi
+          bash .github/sync-theme-content.sh theme-checkout
+          if [[ -n $(git diff --cached --name-only) ]]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
           fi
-
-          # Check if theme has new or changed i18n files
-          if [ -d "theme-checkout/i18n" ]; then
-            shopt -s nullglob
-            for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
-              filename=$(basename "$file")
-              if [ ! -f "i18n/$filename" ] || ! diff -q "i18n/$filename" "$file" > /dev/null 2>&1; then
-                echo "New or changed i18n file: $filename"
-                NEEDS_SYNC=true
-              fi
-            done
-            shopt -u nullglob
-          fi
-
-          # Check if content differs (use rsync dry-run for recursive comparison)
-          if [ -d "theme-checkout/exampleSite/content" ]; then
-            CONTENT_CHANGES=$(rsync -avn --exclude='.git' theme-checkout/exampleSite/content/ content/ 2>/dev/null | grep -v '^\.' | grep -v '^$' | head -5)
-            if [ -n "$CONTENT_CHANGES" ]; then
-              echo "Content changes detected:"
-              echo "$CONTENT_CHANGES"
-              NEEDS_SYNC=true
-            fi
-          fi
-
-          echo "needs_sync=$NEEDS_SYNC" >> $GITHUB_OUTPUT
-
-      - name: Sync hugo.toml
-        if: steps.check_sync.outputs.needs_sync == 'true'
-        run: |
-          if [ -f "theme-checkout/exampleSite/hugo.toml" ]; then
-            echo "Syncing hugo.toml from theme's exampleSite..."
-            cp theme-checkout/exampleSite/hugo.toml hugo.toml
-
-            # Apply demo-specific overrides if the override script exists
-            if [ -f ".github/sync-config-overrides.sh" ]; then
-              echo "Applying demo-specific config overrides..."
-              bash .github/sync-config-overrides.sh hugo.toml
-            fi
-          fi
-
-      - name: Sync i18n files
-        if: steps.check_sync.outputs.needs_sync == 'true'
-        run: |
-          if [ -d "theme-checkout/i18n" ]; then
-            echo "Syncing i18n files from theme..."
-            mkdir -p i18n
-
-            shopt -s nullglob
-            for file in theme-checkout/i18n/*.yaml theme-checkout/i18n/*.yml; do
-              filename=$(basename "$file")
-              cp "$file" "i18n/$filename"
-              echo "Copied $filename"
-            done
-            shopt -u nullglob
-          fi
-
-      - name: Sync content from theme exampleSite
-        if: steps.check_sync.outputs.needs_sync == 'true'
-        run: |
-          if [ ! -d "theme-checkout/exampleSite/content" ]; then
-            exit 0
-          fi
-
-          echo "Syncing content from theme's exampleSite..."
-
-          # Recursively sync all content from exampleSite (including page bundles)
-          rsync -av --exclude='.git' theme-checkout/exampleSite/content/ content/
-
-      - name: Sync static and data files
-        if: steps.check_sync.outputs.needs_sync == 'true'
-        run: |
-          if [ -d "theme-checkout/exampleSite/static" ]; then
-            echo "Syncing static assets..."
-            cp -r theme-checkout/exampleSite/static/* static/ 2>/dev/null || true
-          fi
-          if [ -d "theme-checkout/exampleSite/data" ]; then
-            echo "Syncing data files..."
-            mkdir -p data
-            cp -r theme-checkout/exampleSite/data/* data/ 2>/dev/null || true
-          fi
+          echo "sha=$(git -C theme-checkout rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push content changes to PR branch
-        if: steps.check_sync.outputs.needs_sync == 'true'
+        if: steps.sync.outputs.has_changes == 'true'
         env:
           THEME_VERSION: ${{ steps.theme_version.outputs.version }}
-          THEME_COMMIT: ${{ steps.theme_version.outputs.commit_sha }}
+          THEME_SHA: ${{ steps.sync.outputs.sha }}
           PR_BRANCH: ${{ github.head_ref }}
         run: |
-          git config --global user.name 'Git bot'
-          git config --global user.email 'bot@noreply.github.com'
-
-          if [[ -z $(git status -s) ]]; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          git add hugo.toml i18n/ content/ static/ data/ .github/ || true
+          git config user.name 'Git bot'
+          git config user.email 'bot@noreply.github.com'
 
           git commit -m "Sync content from theme (auto)" \
-            -m "Automatically synced configuration and content from theme version $THEME_VERSION." \
-            -m "" \
-            -m "This includes:" \
-            -m "- hugo.toml configuration (menus, params, etc.)" \
-            -m "- Translation files (i18n)" \
-            -m "- All content sections" \
-            -m "- Static assets and data files" \
-            -m "" \
-            -m "Synced from commit: $THEME_COMMIT"
+            -m "Mirrored the theme's exampleSite at version $THEME_VERSION." \
+            -m "Theme commit: $THEME_SHA"
 
-          git push origin "$PR_BRANCH"
-
-          echo "Content synced and pushed to PR branch successfully"
+          git push origin "HEAD:refs/heads/$PR_BRANCH"
 
       - name: Add comment to PR
-        if: steps.check_sync.outputs.needs_sync == 'true'
+        if: steps.sync.outputs.has_changes == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           THEME_VERSION: ${{ steps.theme_version.outputs.version }}
+          THEME_SHA: ${{ steps.sync.outputs.sha }}
         run: |
           gh pr comment "$PR_NUMBER" --body - <<EOF
           ✅ **Content automatically synced from theme**
 
-          This PR has been updated with content from the theme's exampleSite (version \`$THEME_VERSION\`):
-          - \`hugo.toml\` configuration (menus, params, languages)
-          - Translation files (i18n/*.yaml)
-          - All content sections
-          - Static assets and data files
-
-          Demo-specific overrides were applied from \`.github/sync-config-overrides.sh\` if present.
+          Mirrored the theme's exampleSite at \`$THEME_VERSION\` ([\`${THEME_SHA:0:8}\`](https://github.com/zetxek/adritian-free-hugo-theme/commit/$THEME_SHA)):
+          - \`hugo.toml\` (with overrides from \`.github/sync-config-overrides.sh\`)
+          - \`content/\`, \`static/\`, \`data/\`, \`assets/\` mirrored exactly (\`assets/css/critical.css\` is kept)
+          - \`i18n/\` mirrored from \`exampleSite/i18n\`, or removed when the exampleSite has none
           EOF
