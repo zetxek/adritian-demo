@@ -50,4 +50,4 @@ jobs:
         with:
           message: 'Update critical CSS'
           add: 'assets/css/critical.css'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
