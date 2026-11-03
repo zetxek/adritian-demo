@@ -12,7 +12,7 @@ test.describe('Home page', () => {
 
   test('should have correct title', async ({ page }) => {
     await page.goto('http://localhost:1313');
-    await expect(page).toHaveTitle("Demo site for Adritian - a high performance hugo theme by Adrián Moreno");
+    await expect(page).toHaveTitle("Adritian Demo");
   });
 
   test('should have working navigation links', async ({ page }) => {
