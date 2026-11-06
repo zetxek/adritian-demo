@@ -32,16 +32,27 @@ jobs:
 
       - name: Get theme version
         id: theme_version
+        env:
+          GH_TOKEN: ${{ secrets.CI_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          THEME_VERSION=$(grep "github.com/zetxek/adritian-free-hugo-theme" go.mod | awk '{print $2}')
+          # go.mod pins the theme on a single line:
+          #   require github.com/zetxek/adritian-free-hugo-theme v1.10.5 // indirect
+          # so read the first v-prefixed token on that line instead of a fixed field.
+          THEME_VERSION=$(grep "github.com/zetxek/adritian-free-hugo-theme" go.mod | head -1 | awk '{ for (i = 1; i <= NF; i++) if ($i ~ /^v[0-9]/) { print $i; exit } }')
           echo "Theme version: $THEME_VERSION"
 
-          # Pseudo-version: v0.0.0-yyyymmddhhmmss-abcdefabcdef (12-char commit SHA)
           # Release: vX.Y.Z (a tag in the theme repo)
-          if [[ "$THEME_VERSION" =~ -[0-9]{14}-([0-9a-f]{12})$ ]]; then
-            THEME_REF="${BASH_REMATCH[1]}"
-          elif [[ "$THEME_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          # Pseudo-version: vX.Y.Z-0.yyyymmddhhmmss-abcdefabcdef (12-char commit prefix),
+          # or v0.0.0-yyyymmddhhmmss-abcdefabcdef when nothing is tagged after the commit.
+          if [[ "$THEME_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             THEME_REF="$THEME_VERSION"
+          elif [[ "$THEME_VERSION" =~ -([0-9a-f]{12,})$ ]]; then
+            # actions/checkout cannot fetch an abbreviated SHA, so resolve the
+            # prefix to the full commit SHA before checking the theme out.
+            THEME_REF=$(gh api "repos/zetxek/adritian-free-hugo-theme/commits/${BASH_REMATCH[1]}" --jq '.sha' 2>/dev/null || true)
+            if [[ -z "$THEME_REF" ]]; then
+              echo "::warning::Could not resolve theme commit ${BASH_REMATCH[1]} for '$THEME_VERSION', skipping sync"
+            fi
           else
             echo "::warning::Could not derive a theme ref from '$THEME_VERSION', skipping sync"
             THEME_REF=""
