@@ -16,10 +16,12 @@ This article is a guide to help you create your own version of the site using [A
 
 {{< responsive-image src="images/experience/internet-affairs.png" alt="Adritian theme demo" sizes="(max-width: 768px) 100vw, 600px" >}}
 
-### Creating a site
+## Creating a site
 
 This theme is for the content management system [Hugo](https://gohugo.io/), so that will be a pre-requirement.
 Make sure that you install the `extended` version of Hugo, as the theme uses SCSS for styling, as well as image optimization.
+
+From Hugo `v0.170.0` there is no extended edition any more: SCSS is compiled with [Dart Sass](https://gohugo.io/functions/css/sass/#dart-sass), so install that as well (`brew install sass/sass/sass`, `sudo snap install dart-sass`, or the standalone binary) — without it the build stops with `You need to install Dart Sass`.
 
 A very good place to start is the Quick start guide: [https://gohugo.io/getting-started/quick-start/](https://gohugo.io/getting-started/quick-start/)
 
@@ -65,9 +67,9 @@ locale = "en"
 
 [module]
 [module.hugoVersion]
-# The theme needs Hugo extended 0.158.0+ (for the locale, direction and label language keys)
+# The theme needs Hugo 0.163.0+ (extended up to 0.169.x; Dart Sass from 0.170.0) — for SCSS, per-format image quality and the locale, direction and label language keys
 extended = true
-min = "0.158.0"
+min = "0.163.0"
 
 [[module.imports]]
 path="github.com/zetxek/adritian-free-hugo-theme"
