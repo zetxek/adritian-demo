@@ -10,7 +10,7 @@ tags:
 
 This is a guide that extends the default instructions offered in [the theme readme](https://github.com/zetxek/adritian-free-hugo-theme/blob/main/README.md). 
 
-### Manual configuration 
+## Manual configuration 
 If you prefer to manually set your site, you need to replace the contents of your config file (`hugo.toml`) file by these: 
 
 <details>
@@ -22,9 +22,9 @@ locale = "en"
 
 [module]
 [module.hugoVersion]
-# The theme needs Hugo extended 0.158.0+ (for the locale, direction and label language keys)
+# The theme needs Hugo extended 0.163.0+ (for per-format image quality and the locale, direction and label language keys)
 extended = true
-min = "0.158.0"
+min = "0.163.0"
 
 [[module.imports]]
 path="github.com/zetxek/adritian-free-hugo-theme"
