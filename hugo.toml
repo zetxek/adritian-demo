@@ -136,7 +136,8 @@ source = "icons/favicon.png"
 [params.analytics]
 ## Analytics parameters.
 ### Supported so far: Vercel (Page Insights, Analytics)
-### And Google (Tag Manager, Analytics)
+### Google (Tag Manager, Analytics)
+### And Plausible
 
 # controls vercel page insights - disabled by default
 # to enable, just set to true
@@ -151,6 +152,12 @@ enabled = false
 [params.analytics.googleTagManager]
 code = "GTM-XXXXX"
 enabled = false
+
+# plausible analytics. to enable, set "enabled" to true and set your site's domain
+[params.analytics.plausible]
+enabled = false
+domain = "" # e.g. example.com - defaults to the site's host when empty
+# script = "https://plausible.io/js/script.js" # optional override, e.g. for a self-hosted instance
 
 [build]
 writeStats = true
@@ -264,7 +271,7 @@ URL = '/es/#sobre-mi'
 weight = 2
 [[languages.es.menus.header]]
 name = 'Habilidades'
-URL = '/es/skills'
+URL = '/skills'
 weight = 3
 [[languages.es.menus.header]]
 name = 'Trabajo'
@@ -339,7 +346,7 @@ URL = '#about'
 weight = 2
 [[languages.fr.menus.header]]
 name = 'Compétences'
-URL = '/fr/skills'
+URL = '/skills'
 weight = 3
 [[languages.fr.menus.header]]
 name = 'Portfolio'
@@ -412,7 +419,7 @@ URL = '/ar/#عني'
 weight = 2
 [[languages.ar.menus.header]]
 name = 'المهارات'
-URL = '/ar/skills'
+URL = '/skills'
 weight = 3
 [[languages.ar.menus.header]]
 name = 'أعمالي'
@@ -476,7 +483,7 @@ URL = '/he/#אודות'
 weight = 2
 [[languages.he.menus.header]]
 name = 'מיומנויות'
-URL = '/he/skills'
+URL = '/skills'
 weight = 3
 [[languages.he.menus.header]]
 name = 'עבודות'
@@ -606,8 +613,13 @@ mode = "dropdown" # "dropdown" moves items to More dropdown, "footer" moves to f
 
 [imaging]
   resampleFilter = "Lanczos"
-  quality = 85
   anchor = "Smart"
+  [imaging.jpeg]
+    quality = 85
+  [imaging.webp]
+    quality = 85
+  [imaging.avif]
+    quality = 85
 
 [minify]
   disableCSS = false
